@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Бараа — Чиглэл ХХК</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F3EE;
+    --surface: #FFFFFF;
+    --border: #DDD9D0;
+    --border-strong: #B8B2A5;
+    --text: #1A1A18;
+    --text-muted: #6B6860;
+    --text-light: #9B9890;
+    --accent: #C8330A;
+    --accent-hover: #A82A08;
+    --accent-light: #FDF0EC;
+    --green: #2D7A4F;
+    --green-bg: #EDF7F2;
+    --blue: #1A4A8A;
+    --blue-bg: #EEF3FA;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); }
+
+  header {
+    background: var(--text);
+    color: white;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+  .header-brand span { color: var(--accent); font-size: 20px; font-weight: 600; }
+  .back-btn {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .back-btn:hover { color: white; }
+
+  .page-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 28px 60px;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-light);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--accent); }
+
+  /* Main layout */
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* Left col */
+  .product-main {}
+
+  /* Product header card */
+  .product-header-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .product-code-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .product-code {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-light);
+    letter-spacing: 0.06em;
+    background: var(--bg);
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .badge-mn { background: #E8F3EC; color: #2D7A4F; }
+  .badge-cn { background: #FFF3E8; color: #B85A00; }
+  .badge-manual { background: var(--blue-bg); color: var(--blue); }
+  .badge-a { background: #FFF0EC; color: var(--accent); }
+  .badge-b { background: #FFF8E8; color: #8B6000; }
+  .badge-c { background: #F0F0F0; color: #666; }
+  .badge-stock-zero { background: #FEF0F0; color: #C0392B; }
+  .badge-stock-low { background: #FFF9E6; color: #B7770A; }
+  .badge-stock-ok { background: #EEF8F2; color: #27774F; }
+
+  .product-name {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .product-category {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .product-category strong { color: var(--text); font-weight: 500; }
+
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--bg);
+  }
+  .price-main {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .price-unit {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  /* Spec table */
+  .spec-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--bg);
+  }
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .spec-table tr:not(:last-child) td { border-bottom: 1px solid var(--bg); }
+  .spec-table td {
+    padding: 11px 20px;
+    font-size: 13px;
+    vertical-align: top;
+  }
+  .spec-table td:first-child {
+    color: var(--text-muted);
+    width: 40%;
+    font-size: 12.5px;
+  }
+  .spec-table td:last-child {
+    font-weight: 500;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text);
+  }
+  .spec-table tr:hover td { background: var(--bg); }
+
+  /* Right sidebar */
+  .product-sidebar {}
+
+  .sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    position: sticky;
+    top: 72px;
+  }
+
+  /* PDF section */
+  .pdf-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .pdf-viewer-wrap {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: #F0EDE8;
+    position: relative;
+  }
+  .pdf-viewer-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .no-pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 220px;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .no-pdf-icon { font-size: 40px; opacity: 0.4; }
+
+  .pdf-actions {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: white;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--text); }
+
+  /* Contact card */
+  .contact-card-body { padding: 16px; }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--bg);
+    font-size: 13px;
+  }
+  .contact-item:last-child { border-bottom: none; }
+  .contact-icon { width: 28px; text-align: center; font-size: 15px; }
+  .contact-label { font-size: 11px; color: var(--text-light); display: block; margin-bottom: 1px; }
+  .contact-value { font-weight: 500; color: var(--text); }
+
+  /* Loading */
+  .loading-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 12px;
+    color: var(--text-muted);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 22px; height: 22px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @media (max-width: 900px) {
+    .product-layout { grid-template-columns: 1fr; }
+    .sidebar-card { position: static; }
+    .page-wrap { padding: 20px 16px 40px; }
+    header { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <span>Ч</span> ЧИГЛЭЛ ХХК
+  </div>
+  <a href="index.html" class="back-btn">← Каталог руу буцах</a>
+</header>
+
+<div class="page-wrap" id="pageContent">
+  <div class="loading-page"><div class="spinner"></div> Ачаалж байна...</div>
+</div>
+
+<script>
+async function init() {
+  const params = new URLSearchParams(location.search);
+  const code = params.get('code');
+  if (!code) { location.href = 'index.html'; return; }
+
+  const res = await fetch('data/products.json');
+  const products = await res.json();
+  const p = products.find(x => x.code === code);
+
+  if (!p) {
+    document.getElementById('pageContent').innerHTML = `
+      <div style="text-align:center;padding:80px;color:var(--text-muted)">
+        <div style="font-size:48px;margin-bottom:12px">🔍</div>
+        <h3>Бараа олдсонгүй (#${code})</h3>
+        <p style="margin-top:8px"><a href="index.html" style="color:var(--accent)">Каталог руу буцах</a></p>
+      </div>`;
+    return;
+  }
+
+  document.title = `${p.name || p.code} — Чиглэл ХХК`;
+
+  // Badges
+  const originBadge = p.origin === 'Монгол'
+    ? `<span class="badge badge-mn">🇲🇳 Монгол үйлдвэр</span>`
+    : p.origin === 'Хятад' ? `<span class="badge badge-cn">Хятад</span>` : '';
+  const manualBadge = p.has_manual ? `<span class="badge badge-manual">📄 Гарын авлагатай</span>` : '';
+  const abcBadge = p.abc ? `<span class="badge badge-${p.abc.toLowerCase()}">ABC: ${p.abc}</span>` : '';
+
+  const stockBadge = p.stock === null ? '' :
+    p.stock === 0 ? `<span class="badge badge-stock-zero">Дууссан</span>` :
+    p.stock <= 3 ? `<span class="badge badge-stock-low">⚠ ${p.stock} ширхэг үлдсэн</span>` :
+    `<span class="badge badge-stock-ok">✓ ${p.stock} ширхэг нөөцтэй</span>`;
+
+  // Specs rows
+  const specRows = [
+    ['Барааны код', `#${p.code}`],
+    ['Ангилал', p.category],
+    ['Дэд ангилал', p.subcategory],
+    ['Гарал үүсэл', p.origin],
+    ['Бренд', p.brand],
+    ['Марк / Загвар', p.model],
+    ['Онцлог', p.features],
+  ].filter(([,v]) => v).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+
+  const dimParts = [];
+  if (p.dims?.length) dimParts.push(`${p.dims.length}мм (урт)`);
+  if (p.dims?.width) dimParts.push(`${p.dims.width}мм (өргөн)`);
+  if (p.dims?.height) dimParts.push(`${p.dims.height}мм (өндөр)`);
+
+  const techRows = [
+    ['Хэмжээ', dimParts.length ? dimParts.join(' × ') : null],
+    ['Жин', p.weight ? `${p.weight} кг` : null],
+    ['Хүчдэл', p.voltage ? `${p.voltage}V` : null],
+    ['Хүч чадал', p.power_kw ? `${p.power_kw} кВт` : null],
+    ['Нөөц', p.stock !== null ? `${p.stock} ширхэг` : null],
+    ['Нөөцийн дүн', p.stock_value ? `${p.stock_value.toLocaleString()} ₮` : null],
+  ].filter(([,v]) => v).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+
+  // PDF section
+  let pdfSection = '';
+  if (p.has_manual) {
+    if (p.manual_url) {
+      // Has actual PDF link
+      const embedUrl = p.manual_url.includes('drive.google.com')
+        ? p.manual_url.replace('/view', '/preview').replace('/edit', '/preview')
+        : p.manual_url;
+      pdfSection = `
+        <div class="pdf-section">
+          <div class="card-title">📄 Гарын авлага / User Manual</div>
+          <div class="pdf-viewer-wrap">
+            <iframe src="${embedUrl}" allowfullscreen></iframe>
+          </div>
+          <div class="pdf-actions">
+            <a href="${p.manual_url}" target="_blank" class="btn-primary">
+              ⬇ PDF татаж авах
+            </a>
+            <a href="${p.manual_url}" target="_blank" class="btn-secondary">
+              🔗 Google Drive-д нээх
+            </a>
+          </div>
+        </div>`;
+    } else {
+      // Manual flagged but no URL yet
+      pdfSection = `
+        <div class="pdf-section">
+          <div class="card-title">📄 Гарын авлага / User Manual</div>
+          <div class="no-pdf">
+            <div class="no-pdf-icon">📋</div>
+            <div>Гарын авлага байгаа — удахгүй нэмэгдэнэ</div>
+          </div>
+        </div>`;
+    }
+  }
+
+  document.getElementById('pageContent').innerHTML = `
+    <div class="breadcrumb">
+      <a href="index.html">Каталог</a> /
+      <span>${p.category || '—'}</span> /
+      <span>${p.subcategory || '—'}</span>
+    </div>
+
+    <div class="product-layout">
+      <div class="product-main">
+
+        <div class="product-header-card">
+          <div class="product-code-row">
+            <span class="product-code">#${p.code}</span>
+            ${originBadge} ${abcBadge} ${manualBadge} ${stockBadge}
+          </div>
+          <h1 class="product-name">${p.name || '—'}</h1>
+          <div class="product-category">
+            <strong>${p.category || '—'}</strong>
+            ${p.subcategory ? ` / ${p.subcategory}` : ''}
+          </div>
+          ${p.price ? `
+          <div class="price-row">
+            <div class="price-main">${p.price.toLocaleString()}</div>
+            <div class="price-unit">₮ / нэгж</div>
+          </div>` : ''}
+        </div>
+
+        ${specRows ? `
+        <div class="spec-card">
+          <div class="card-title">Ерөнхий мэдээлэл</div>
+          <table class="spec-table">${specRows}</table>
+        </div>` : ''}
+
+        ${techRows ? `
+        <div class="spec-card">
+          <div class="card-title">Техникийн үзүүлэлт</div>
+          <table class="spec-table">${techRows}</table>
+        </div>` : ''}
+
+        ${pdfSection}
+
+      </div>
+
+      <div class="product-sidebar">
+        <div class="sidebar-card">
+          <div class="card-title">Холбоо барих</div>
+          <div class="contact-card-body">
+            <div class="contact-item">
+              <div class="contact-icon">📞</div>
+              <div>
+                <span class="contact-label">Утас</span>
+                <span class="contact-value">+976 7611 5333</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">📱</div>
+              <div>
+                <span class="contact-label">Мобайл</span>
+                <span class="contact-value">+976 9133 5333</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">✉️</div>
+              <div>
+                <span class="contact-label">И-мэйл</span>
+                <span class="contact-value">info@chiglel.mn</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">🌐</div>
+              <div>
+                <span class="contact-label">Вэб</span>
+                <span class="contact-value"><a href="https://www.chiglel.mn" target="_blank" style="color:var(--accent);text-decoration:none">chiglel.mn</a></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-title">Дэлгүүрийн байршил</div>
+          <div class="contact-card-body">
+            <div class="contact-item">
+              <div class="contact-icon">🏪</div>
+              <div>
+                <span class="contact-label">Төв дэлгүүр (ЧД)</span>
+                <span class="contact-value" style="font-size:11px;line-height:1.5">Хүчит шонхор зах, Содмонгол ШТС-ын эсрэг</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">🏭</div>
+              <div>
+                <span class="contact-label">Үйлдвэр (ХУД)</span>
+                <span class="contact-value" style="font-size:11px;line-height:1.5">3-р цахилгаан станцийн баруун урд</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+init();
+</script>
+</body>
+</html>

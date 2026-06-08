@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Чиглэл Каталог</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F3EE;
+    --surface: #FFFFFF;
+    --border: #DDD9D0;
+    --text: #1A1A18;
+    --text-muted: #6B6860;
+    --text-light: #9B9890;
+    --accent: #C8330A;
+    --accent-hover: #A82A08;
+    --accent-light: #FDF0EC;
+    --green: #2D7A4F;
+    --green-bg: #EDF7F2;
+    --red: #C0392B;
+    --red-bg: #FEF0F0;
+    --blue: #1A4A8A;
+    --blue-bg: #EEF3FA;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header {
+    background: var(--text);
+    color: white;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .header-brand { font-family: var(--mono); font-size: 15px; }
+  .header-brand span { color: var(--accent); font-size: 18px; font-weight: 600; }
+  .header-right a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 12px;
+    font-family: var(--mono);
+    transition: color 0.2s;
+  }
+  .header-right a:hover { color: white; }
+
+  /* LOGIN SCREEN */
+  #loginScreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+    padding: 40px;
+  }
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 440px;
+  }
+  .login-icon { font-size: 40px; margin-bottom: 16px; }
+  .login-card h2 { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+  .login-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+
+  label { display: block; font-size: 12px; font-weight: 500; margin-bottom: 6px; color: var(--text-muted); font-family: var(--mono); letter-spacing: 0.05em; text-transform: uppercase; }
+  input[type=text], input[type=password], input[type=url], input[type=number], select, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 13.5px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200,51,10,0.08);
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-hint { font-size: 11px; color: var(--text-light); margin-top: 5px; line-height: 1.5; }
+  .form-hint a { color: var(--blue); }
+
+  .btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-primary:disabled { opacity: 0.5; cursor: default; }
+
+  /* MAIN ADMIN */
+  #adminScreen { display: none; }
+
+  .admin-layout {
+    display: flex;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* Admin sidebar */
+  .admin-sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .admin-nav-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    padding: 10px 20px 4px;
+  }
+  .admin-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .admin-nav-btn:hover { background: var(--bg); color: var(--text); }
+  .admin-nav-btn.active { color: var(--accent); background: var(--accent-light); border-left-color: var(--accent); font-weight: 500; }
+  .admin-nav-btn .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+  /* Admin main */
+  .admin-main {
+    flex: 1;
+    padding: 28px 32px;
+    overflow: auto;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+  }
+  .panel-header h2 { font-size: 18px; font-weight: 600; }
+  .panel-header p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Table */
+  .data-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .table-toolbar {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .table-search {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 13px;
+    background: var(--surface);
+    outline: none;
+  }
+  .table-search:focus { border-color: var(--accent); }
+  .filter-chip {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 12px;
+    background: var(--surface);
+    cursor: pointer;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .filter-chip.active {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    padding: 10px 16px;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 16px;
+    font-size: 12.5px;
+    border-bottom: 1px solid var(--bg);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg); }
+
+  .td-code { font-family: var(--mono); font-size: 11px; color: var(--text-light); }
+  .td-name { font-weight: 500; max-width: 280px; }
+  .td-name small { display: block; font-size: 11px; color: var(--text-muted); font-weight: 400; margin-top: 1px; }
+  .td-price { font-family: var(--mono); font-size: 12px; white-space: nowrap; }
+  .td-stock { font-family: var(--mono); font-size: 12px; text-align: center; }
+
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  .dot-green { background: var(--green); }
+  .dot-orange { background: #E87010; }
+  .dot-red { background: var(--red); }
+  .dot-gray { background: #B0ABA3; }
+
+  .edit-btn {
+    padding: 5px 12px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 11px;
+    font-family: var(--mono);
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .edit-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .edit-btn.has-manual { border-color: var(--blue); color: var(--blue); background: var(--blue-bg); }
+
+  /* Edit Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--surface);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(16px);
+    transition: transform 0.2s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+  .modal-header h3 { font-size: 15px; font-weight: 600; }
+  .modal-header small { font-size: 11px; color: var(--text-muted); font-family: var(--mono); display: block; margin-top: 1px; }
+  .close-btn {
+    background: none; border: none;
+    font-size: 20px; color: var(--text-muted);
+    cursor: pointer; line-height: 1;
+    padding: 4px;
+  }
+  .close-btn:hover { color: var(--text); }
+  .modal-body { padding: 24px; }
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .btn-save {
+    padding: 10px 24px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-save:hover { background: var(--accent-hover); }
+  .btn-save:disabled { opacity: 0.5; cursor: default; }
+  .btn-cancel {
+    padding: 10px 20px;
+    background: white;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-cancel:hover { border-color: var(--text-muted); color: var(--text); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--text);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: var(--mono);
+    z-index: 9999;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s;
+    max-width: 360px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: var(--green); }
+  .toast.error { background: var(--red); }
+
+  /* Stats cards */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .stat-card .stat-val {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .stat-card .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  .github-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: var(--mono);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    margin-bottom: 20px;
+  }
+  .github-status.connected { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+  .github-status.error { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+
+  .pagination-small {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .pg-btn {
+    min-width: 30px;
+    height: 30px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .pg-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .pg-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .pg-btn:disabled { opacity: 0.3; cursor: default; }
+  .pg-info { font-family: var(--mono); font-size: 11px; color: var(--text-muted); margin-left: auto; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand"><span>Ч</span> ЧИГЛЭЛ — ADMIN PANEL</div>
+  <div class="header-right">
+    <a href="../index.html">← Каталог руу буцах</a>
+  </div>
+</header>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-icon">🔐</div>
+    <h2>Admin нэвтрэх</h2>
+    <p>GitHub Personal Access Token ашиглан нэвтэрнэ. Token нь бараа мэдээлэл засах эрхтэй байх ёстой.</p>
+
+    <div class="form-group">
+      <label>GitHub Repository</label>
+      <input type="text" id="repoInput" placeholder="username/chiglel-catalog" value="">
+      <div class="form-hint">Жишээ: <code>mycompany/chiglel-catalog</code></div>
+    </div>
+    <div class="form-group">
+      <label>GitHub Token (Personal Access Token)</label>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+      <div class="form-hint">
+        <a href="https://github.com/settings/tokens/new?scopes=repo&description=Chiglel+Admin" target="_blank">
+          🔗 Token үүсгэх
+        </a> — Contents: Read/Write эрх сонго
+      </div>
+    </div>
+    <div id="loginError" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none;font-family:var(--mono);"></div>
+    <button class="btn-primary" id="loginBtn" onclick="doLogin()">Нэвтрэх →</button>
+
+    <hr class="section-divider">
+    <div style="font-size:12px;color:var(--text-light);line-height:1.7;">
+      <strong>Анхны тохируулга:</strong><br>
+      1. GitHub-д <code>chiglel-catalog</code> repository үүсгэх<br>
+      2. Эдгээр файлуудыг upload хийх<br>
+      3. Settings → Pages → main branch идэвхжүүлэх<br>
+      4. Token үүсгэж нэвтрэх
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN MAIN -->
+<div id="adminScreen">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-nav-label">Удирдлага</div>
+      <button class="admin-nav-btn active" onclick="showPanel('products')">
+        <span class="nav-icon">📦</span> Бараа жагсаалт
+      </button>
+      <button class="admin-nav-btn" onclick="showPanel('manuals')">
+        <span class="nav-icon">📄</span> Гарын авлага
+      </button>
+      <button class="admin-nav-btn" onclick="showPanel('stats')">
+        <span class="nav-icon">📊</span> Статистик
+      </button>
+      <div class="admin-nav-label" style="margin-top:16px">Систем</div>
+      <button class="admin-nav-btn" onclick="showPanel('settings')">
+        <span class="nav-icon">⚙️</span> Тохиргоо
+      </button>
+      <button class="admin-nav-btn" onclick="doLogout()" style="margin-top:auto">
+        <span class="nav-icon">🚪</span> Гарах
+      </button>
+    </aside>
+
+    <main class="admin-main">
+
+      <!-- PRODUCTS PANEL -->
+      <div id="panel-products" class="panel active">
+        <div class="panel-header">
+          <div>
+            <h2>Бараа жагсаалт</h2>
+            <p>Барааны мэдээлэл засах, PDF линк нэмэх</p>
+          </div>
+          <button class="btn-save" onclick="saveAllChanges()" id="saveAllBtn" style="display:none">
+            💾 Бүгдийг хадгалах
+          </button>
+        </div>
+        <div id="githubStatus" class="github-status">⏳ GitHub холбоо шалгаж байна...</div>
+        <div class="data-table-wrap">
+          <div class="table-toolbar">
+            <input class="table-search" id="adminSearch" placeholder="Барааны нэр, код хайх..." oninput="adminFilter()">
+            <button class="filter-chip" id="chip-manual" onclick="adminChip('manual')">📄 PDF байхгүй</button>
+            <button class="filter-chip" id="chip-mn" onclick="adminChip('mn')">🇲🇳 Монгол</button>
+          </div>
+          <div id="adminTableWrap">Ачаалж байна...</div>
+        </div>
+      </div>
+
+      <!-- MANUALS PANEL -->
+      <div id="panel-manuals" class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Гарын авлага</h2>
+            <p>Гарын авлагатай бараануудын PDF линкүүд</p>
+          </div>
+        </div>
+        <div class="data-table-wrap">
+          <div id="manualsTableWrap">Ачаалж байна...</div>
+        </div>
+      </div>
+
+      <!-- STATS PANEL -->
+      <div id="panel-stats" class="panel">
+        <div class="panel-header">
+          <div><h2>Статистик</h2><p>Барааны ерөнхий мэдээлэл</p></div>
+        </div>
+        <div id="statsContent">Ачаалж байна...</div>
+      </div>
+
+      <!-- SETTINGS PANEL -->
+      <div id="panel-settings" class="panel">
+        <div class="panel-header">
+          <div><h2>Тохиргоо</h2><p>GitHub холболт ба систем тохиргоо</p></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:500px;">
+          <div class="form-group">
+            <label>GitHub Repository</label>
+            <input type="text" id="settingsRepo" readonly>
+          </div>
+          <div class="form-group">
+            <label>Token (нуугдсан)</label>
+            <input type="password" id="settingsToken" value="••••••••••••••••••••" readonly>
+          </div>
+          <button class="btn-cancel" onclick="doLogout()">🚪 Гарах / Token солих</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3>Бараа засах</h3>
+        <small id="modalCode">—</small>
+      </div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Барааны нэр</label>
+        <input type="text" id="editName" placeholder="Барааны нэр">
+      </div>
+      <div class="form-group">
+        <label>Үнэ (₮)</label>
+        <input type="number" id="editPrice" placeholder="1500000">
+      </div>
+      <div class="form-group">
+        <label>Гарын авлага (PDF) — Google Drive линк</label>
+        <input type="url" id="editManualUrl" placeholder="https://drive.google.com/file/d/...">
+        <div class="form-hint">
+          Google Drive → файл дээр баруун товш → Share → "Anyone with the link" → линкийг хуулах
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Бренд</label>
+        <input type="text" id="editBrand" placeholder="Чиглэл ХХК">
+      </div>
+      <div class="form-group">
+        <label>Марк / Загвар</label>
+        <input type="text" id="editModel" placeholder="ЧШШ-2-4">
+      </div>
+      <div class="form-group">
+        <label>Онцлог / Тэмдэглэл</label>
+        <textarea id="editFeatures" rows="3" placeholder="Нэмэлт мэдээлэл..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Гарал үүсэл</label>
+        <select id="editOrigin">
+          <option value="">—</option>
+          <option value="Монгол">Монгол</option>
+          <option value="Хятад">Хятад</option>
+          <option value="Солонгос">Солонгос</option>
+          <option value="Турк">Турк</option>
+          <option value="Итали">Итали</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Болих</button>
+      <button class="btn-save" id="modalSaveBtn" onclick="saveProduct()">💾 Хадгалах</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+let products = [];
+let adminFiltered = [];
+let adminPage = 1;
+const ADMIN_PAGE = 50;
+let editingCode = null;
+let pendingChanges = {};
+let githubToken = '';
+let githubRepo = '';
+let activeChips = new Set();
+
+// ── AUTH ──
+function doLogin() {
+  const repo = document.getElementById('repoInput').value.trim();
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!repo || !token) { showLoginError('Repository болон Token оруулна уу'); return; }
+  if (!repo.includes('/')) { showLoginError('Repository формат буруу: username/reponame'); return; }
+
+  githubRepo = repo;
+  githubToken = token;
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = 'Шалгаж байна...';
+
+  // Verify token by fetching repo
+  fetch(`https://api.github.com/repos/${githubRepo}`, {
+    headers: { Authorization: `token ${githubToken}` }
+  }).then(r => {
+    if (!r.ok) throw new Error(r.status === 401 ? 'Token буруу байна' : 'Repository олдсонгүй');
+    return r.json();
+  }).then(() => {
+    // Save to sessionStorage
+    sessionStorage.setItem('gh_repo', githubRepo);
+    sessionStorage.setItem('gh_token', githubToken);
+    showAdmin();
+  }).catch(e => {
+    showLoginError(e.message);
+    btn.disabled = false;
+    btn.textContent = 'Нэвтрэх →';
+  });
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById('loginError');
+  el.textContent = '⚠ ' + msg;
+  el.style.display = 'block';
+}
+
+function doLogout() {
+  sessionStorage.removeItem('gh_repo');
+  sessionStorage.removeItem('gh_token');
+  githubToken = '';
+  githubRepo = '';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminScreen').style.display = 'none';
+}
+
+async function showAdmin() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminScreen').style.display = 'block';
+  document.getElementById('settingsRepo').value = githubRepo;
+
+  await loadProducts();
+  checkGitHubStatus();
+  buildAdminTable();
+  buildStatsPanel();
+}
+
+// ── LOAD DATA ──
+async function loadProducts() {
+  const res = await fetch('../data/products.json?_=' + Date.now());
+  products = await res.json();
+  adminFiltered = [...products];
+}
+
+// ── GITHUB STATUS ──
+async function checkGitHubStatus() {
+  const el = document.getElementById('githubStatus');
+  try {
+    const r = await fetch(`https://api.github.com/repos/${githubRepo}/contents/data/products.json`, {
+      headers: { Authorization: `token ${githubToken}` }
+    });
+    if (r.ok) {
+      el.className = 'github-status connected';
+      el.textContent = `✓ GitHub холбогдсон — ${githubRepo}`;
+    } else throw new Error();
+  } catch {
+    el.className = 'github-status error';
+    el.textContent = '✗ GitHub холбоо алдаатай — өгөгдөл хадгалагдахгүй';
+  }
+}
+
+// ── ADMIN TABLE ──
+function buildAdminTable() {
+  adminFiltered = products.filter(p => {
+    const q = document.getElementById('adminSearch').value.trim().toLowerCase();
+    if (q) {
+      const hay = [p.name, p.code, p.brand, p.model].filter(Boolean).join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (activeChips.has('manual') && p.manual_url) return false;
+    if (activeChips.has('mn') && p.origin !== 'Монгол') return false;
+    return true;
+  });
+
+  adminPage = 1;
+  renderAdminTable();
+}
+
+function renderAdminTable() {
+  const start = (adminPage - 1) * ADMIN_PAGE;
+  const slice = adminFiltered.slice(start, start + ADMIN_PAGE);
+  const totalPages = Math.ceil(adminFiltered.length / ADMIN_PAGE);
+
+  let html = `<table>
+    <thead><tr>
+      <th>Код</th><th>Барааны нэр</th><th>Үнэ</th><th>Нөөц</th><th>PDF</th><th></th>
+    </tr></thead><tbody>`;
+
+  slice.forEach(p => {
+    const changed = pendingChanges[p.code];
+    const cur = changed ? { ...p, ...changed } : p;
+    const hasPdf = cur.manual_url;
+    const stockDot = cur.stock === 0 ? 'dot-red' : cur.stock <= 3 ? 'dot-orange' : cur.stock ? 'dot-green' : 'dot-gray';
+
+    html += `<tr>
+      <td class="td-code">#${p.code}</td>
+      <td class="td-name">
+        ${cur.name || '—'}
+        <small>${p.category || ''} ${p.subcategory ? '/ ' + p.subcategory : ''}</small>
+      </td>
+      <td class="td-price">${cur.price ? cur.price.toLocaleString() + ' ₮' : '—'}</td>
+      <td class="td-stock"><span class="status-dot ${stockDot}"></span>${cur.stock !== null ? cur.stock : '—'}</td>
+      <td style="text-align:center">${hasPdf ? '✅' : '—'}</td>
+      <td><button class="edit-btn ${hasPdf ? 'has-manual' : ''}" onclick="openEdit('${p.code}')">
+        ${changed ? '✏ засагдсан' : '✏ засах'}
+      </button></td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+
+  // Pagination
+  let pgHtml = `<div class="pagination-small">
+    <button class="pg-btn" onclick="adminGoPage(${adminPage-1})" ${adminPage===1?'disabled':''}>←</button>`;
+
+  for (let i = Math.max(1, adminPage-2); i <= Math.min(totalPages, adminPage+2); i++) {
+    pgHtml += `<button class="pg-btn ${i===adminPage?'active':''}" onclick="adminGoPage(${i})">${i}</button>`;
+  }
+  pgHtml += `<button class="pg-btn" onclick="adminGoPage(${adminPage+1})" ${adminPage===totalPages?'disabled':''}>→</button>
+    <span class="pg-info">${adminFiltered.length} бараа / нийт ${products.length}</span>
+  </div>`;
+
+  document.getElementById('adminTableWrap').innerHTML = html + pgHtml;
+
+  const hasPending = Object.keys(pendingChanges).length > 0;
+  document.getElementById('saveAllBtn').style.display = hasPending ? 'block' : 'none';
+}
+
+function adminGoPage(p) {
+  const total = Math.ceil(adminFiltered.length / ADMIN_PAGE);
+  if (p < 1 || p > total) return;
+  adminPage = p;
+  renderAdminTable();
+}
+
+function adminFilter() { buildAdminTable(); }
+
+function adminChip(chip) {
+  activeChips.has(chip) ? activeChips.delete(chip) : activeChips.add(chip);
+  document.getElementById('chip-' + chip).classList.toggle('active', activeChips.has(chip));
+  buildAdminTable();
+}
+
+// ── EDIT MODAL ──
+function openEdit(code) {
+  const base = products.find(p => p.code === code);
+  const cur = pendingChanges[code] ? { ...base, ...pendingChanges[code] } : base;
+  editingCode = code;
+
+  document.getElementById('modalCode').textContent = `#${code}`;
+  document.getElementById('editName').value = cur.name || '';
+  document.getElementById('editPrice').value = cur.price || '';
+  document.getElementById('editManualUrl').value = cur.manual_url || '';
+  document.getElementById('editBrand').value = cur.brand || '';
+  document.getElementById('editModel').value = cur.model || '';
+  document.getElementById('editFeatures').value = cur.features || '';
+  document.getElementById('editOrigin').value = cur.origin || '';
+
+  document.getElementById('editModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('editModal').classList.remove('open');
+  editingCode = null;
+}
+
+function saveProduct() {
+  if (!editingCode) return;
+  const changes = {
+    name: document.getElementById('editName').value.trim() || null,
+    price: parseInt(document.getElementById('editPrice').value) || null,
+    manual_url: document.getElementById('editManualUrl').value.trim() || null,
+    has_manual: !!document.getElementById('editManualUrl').value.trim(),
+    brand: document.getElementById('editBrand').value.trim() || null,
+    model: document.getElementById('editModel').value.trim() || null,
+    features: document.getElementById('editFeatures').value.trim() || null,
+    origin: document.getElementById('editOrigin').value || null,
+  };
+
+  pendingChanges[editingCode] = changes;
+  closeModal();
+  renderAdminTable();
+  showToast('✏ Засвар хийгдлээ — "Бүгдийг хадгалах" дарж GitHub-д хадгална', 'success');
+}
+
+// ── SAVE TO GITHUB ──
+async function saveAllChanges() {
+  if (!Object.keys(pendingChanges).length) return;
+  const btn = document.getElementById('saveAllBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Хадгалж байна...';
+
+  // Merge changes into products
+  const updated = products.map(p => {
+    if (pendingChanges[p.code]) {
+      return { ...p, ...pendingChanges[p.code] };
+    }
+    return p;
+  });
+
+  try {
+    // Get current file SHA
+    const metaRes = await fetch(`https://api.github.com/repos/${githubRepo}/contents/data/products.json`, {
+      headers: { Authorization: `token ${githubToken}` }
+    });
+    const meta = await metaRes.json();
+    const sha = meta.sha;
+
+    // Update file
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(updated, null, 2))));
+    const putRes = await fetch(`https://api.github.com/repos/${githubRepo}/contents/data/products.json`, {
+      method: 'PUT',
+      headers: { Authorization: `token ${githubToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `Admin: Update ${Object.keys(pendingChanges).length} products`,
+        content,
+        sha
+      })
+    });
+
+    if (!putRes.ok) throw new Error('GitHub хадгалах алдаа: ' + putRes.status);
+
+    products = updated;
+    pendingChanges = {};
+    renderAdminTable();
+    buildManualsPanel();
+    showToast(`✓ ${Object.keys(pendingChanges).length || 'Бүх'} өөрчлөлт GitHub-д хадгалагдлаа!`, 'success');
+  } catch (e) {
+    showToast('✗ Хадгалах алдаа: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 Бүгдийг хадгалах';
+  }
+}
+
+// ── MANUALS PANEL ──
+function buildManualsPanel() {
+  const withManual = products.filter(p => p.has_manual || p.manual_url);
+  let html = `<table>
+    <thead><tr>
+      <th>Код</th><th>Барааны нэр</th><th>PDF линк</th><th></th>
+    </tr></thead><tbody>`;
+
+  withManual.forEach(p => {
+    html += `<tr>
+      <td class="td-code">#${p.code}</td>
+      <td class="td-name">${p.name || '—'}<small>${p.subcategory || ''}</small></td>
+      <td style="font-size:11px;font-family:var(--mono);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+        ${p.manual_url ? `<a href="${p.manual_url}" target="_blank" style="color:var(--blue)">${p.manual_url.substring(0,50)}...</a>` : '<span style="color:var(--text-light)">Линк байхгүй</span>'}
+      </td>
+      <td><button class="edit-btn ${p.manual_url ? 'has-manual' : ''}" onclick="openEdit('${p.code}'); showPanel('products')">✏ засах</button></td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+  document.getElementById('manualsTableWrap').innerHTML = html;
+}
+
+// ── STATS ──
+function buildStatsPanel() {
+  const cats = {};
+  let withManual = 0, withUrl = 0, inStock = 0, outStock = 0;
+  let totalVal = 0;
+  products.forEach(p => {
+    if (p.has_manual) withManual++;
+    if (p.manual_url) withUrl++;
+    if (p.stock > 0) inStock++;
+    if (p.stock === 0) outStock++;
+    if (p.stock_value) totalVal += p.stock_value;
+    cats[p.category || '—'] = (cats[p.category || '—'] || 0) + 1;
+  });
+
+  let catRows = Object.entries(cats).sort((a,b) => b[1]-a[1]).map(([k,v]) =>
+    `<tr><td>${k}</td><td style="font-family:var(--mono);font-weight:500">${v}</td></tr>`
+  ).join('');
+
+  document.getElementById('statsContent').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val">${products.length}</div><div class="stat-label">Нийт бараа</div></div>
+      <div class="stat-card"><div class="stat-val">${withManual}</div><div class="stat-label">Гарын авлагатай</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--blue)">${withUrl}</div><div class="stat-label">PDF линктэй</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--green)">${inStock}</div><div class="stat-label">Нөөцтэй</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--red)">${outStock}</div><div class="stat-label">Нөөц дууссан</div></div>
+      <div class="stat-card"><div class="stat-val" style="font-size:18px">${(totalVal/1000000).toFixed(0)}M</div><div class="stat-label">Нөөцийн нийт дүн ₮</div></div>
+    </div>
+    <div class="data-table-wrap">
+      <div class="card-title" style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg);font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted)">Ангиллаар</div>
+      <table><thead><tr><th>Ангилал</th><th>Тоо</th></tr></thead><tbody>${catRows}</tbody></table>
+    </div>`;
+}
+
+// ── NAV ──
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  document.querySelectorAll('.admin-nav-btn').forEach(b => {
+    if (b.textContent.toLowerCase().includes(
+      id === 'products' ? 'бараа' : id === 'manuals' ? 'гарын' : id === 'stats' ? 'стат' : 'тохир'
+    )) b.classList.add('active');
+  });
+  if (id === 'manuals') buildManualsPanel();
+  if (id === 'stats') buildStatsPanel();
+}
+
+// ── TOAST ──
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  // Restore session
+  const savedRepo = sessionStorage.getItem('gh_repo');
+  const savedToken = sessionStorage.getItem('gh_token');
+  if (savedRepo && savedToken) {
+    githubRepo = savedRepo;
+    githubToken = savedToken;
+    document.getElementById('repoInput').value = savedRepo;
+    showAdmin();
+  }
+});
+
+// Close modal on overlay click
+document.getElementById('editModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('editModal')) closeModal();
+});
+</script>
+</body>
+</html>
