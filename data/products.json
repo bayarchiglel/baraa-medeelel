@@ -6811,8 +6811,8 @@
     "power_kw": 21,
     "brand": "Чиглэл ХХК",
     "model": "НМЗ-Я-160",
-    "has_manual": false,
-    "manual_url": null,
+    "has_manual": true,
+    "manual_url": "https://drive.google.com/open?id=1WhrBW8liYmc0lp4YtzUPdU1i9L8yUKYP&usp=drive_copy",
     "images": []
   },
   {
@@ -6835,8 +6835,8 @@
     "power_kw": 21,
     "brand": "Чиглэл ХХК",
     "model": "НМЗ-Я-180",
-    "has_manual": false,
-    "manual_url": null,
+    "has_manual": true,
+    "manual_url": "https://drive.google.com/open?id=1WhrBW8liYmc0lp4YtzUPdU1i9L8yUKYP&usp=drive_copy",
     "images": []
   },
   {
@@ -6859,8 +6859,8 @@
     "power_kw": 24,
     "brand": "Чиглэл ХХК",
     "model": "НМЗ-Я-250",
-    "has_manual": false,
-    "manual_url": null,
+    "has_manual": true,
+    "manual_url": "https://drive.google.com/open?id=1WhrBW8liYmc0lp4YtzUPdU1i9L8yUKYP&usp=drive_copy",
     "images": []
   },
   {
@@ -6883,8 +6883,8 @@
     "power_kw": 6,
     "brand": "Чиглэл ХХК",
     "model": "НМЗ-Я-50",
-    "has_manual": false,
-    "manual_url": null,
+    "has_manual": true,
+    "manual_url": "https://drive.google.com/open?id=1WhrBW8liYmc0lp4YtzUPdU1i9L8yUKYP&usp=drive_copy",
     "images": []
   },
   {
@@ -7003,8 +7003,8 @@
     "power_kw": 6,
     "brand": "Чиглэл ХХК",
     "model": "НМЗ-Я-50Ж",
-    "has_manual": false,
-    "manual_url": null,
+    "has_manual": true,
+    "manual_url": "https://drive.google.com/open?id=1WhrBW8liYmc0lp4YtzUPdU1i9L8yUKYP&usp=drive_copy",
     "images": []
   },
   {
@@ -7027,8 +7027,8 @@
     "power_kw": 9,
     "brand": "Чиглэл ХХК",
     "model": "НМЗ-Я-80",
-    "has_manual": false,
-    "manual_url": null,
+    "has_manual": true,
+    "manual_url": "https://drive.google.com/open?id=1WhrBW8liYmc0lp4YtzUPdU1i9L8yUKYP&usp=drive_copy",
     "images": []
   },
   {
