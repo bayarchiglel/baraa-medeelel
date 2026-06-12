@@ -1,1007 +1,846 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="mn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Чиглэл Каталог</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin — Chiglel Catalog</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #F5F3EE;
-    --surface: #FFFFFF;
-    --border: #DDD9D0;
-    --text: #1A1A18;
-    --text-muted: #6B6860;
-    --text-light: #9B9890;
-    --accent: #C8330A;
-    --accent-hover: #A82A08;
-    --accent-light: #FDF0EC;
-    --green: #2D7A4F;
-    --green-bg: #EDF7F2;
-    --red: #C0392B;
-    --red-bg: #FEF0F0;
-    --blue: #1A4A8A;
-    --blue-bg: #EEF3FA;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; }
+:root{
+  --bg:#edf0f3;--surface:#fff;--ink:#14202e;--muted:#5c6b7a;--faint:#94a1ae;
+  --line:#d5dbe2;--line-soft:#e8ecf0;
+  --brand:#1660c9;--brand-deep:#0e3b7e;--brand-soft:#e8f0fc;
+  --ok:#1e7a46;--ok-soft:#e6f3ec;
+  --warn:#b35a00;--warn-soft:#fbf0e3;
+  --bad:#b3242f;--bad-soft:#fbe9ea;
+  --mono:'IBM Plex Mono',Consolas,monospace;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --disp:'Archivo',var(--sans);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14px}
+button{font-family:var(--sans)}
 
-  header {
-    background: var(--text);
-    color: white;
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-  }
-  .header-brand { font-family: var(--mono); font-size: 15px; }
-  .header-brand span { color: var(--accent); font-size: 18px; font-weight: 600; }
-  .header-right a {
-    color: rgba(255,255,255,0.6);
-    text-decoration: none;
-    font-size: 12px;
-    font-family: var(--mono);
-    transition: color 0.2s;
-  }
-  .header-right a:hover { color: white; }
+header{
+  background:var(--ink);color:#fff;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;position:sticky;top:0;z-index:60;
+}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{width:30px;height:30px;background:var(--brand);border-radius:6px;display:grid;place-items:center;font:800 16px var(--disp)}
+.brand-name{font:700 15px var(--disp);letter-spacing:.04em}
+.brand-name small{display:block;font:400 10px var(--mono);color:#8fa3b8;letter-spacing:.14em;margin-top:1px}
+.back{color:#8fa3b8;font:12px var(--mono);text-decoration:none}
+.back:hover{color:#fff}
 
-  /* LOGIN SCREEN */
-  #loginScreen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 56px);
-    padding: 40px;
-  }
-  .login-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 40px;
-    width: 100%;
-    max-width: 440px;
-  }
-  .login-icon { font-size: 40px; margin-bottom: 16px; }
-  .login-card h2 { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
-  .login-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+/* ───── LOGIN ───── */
+.login{min-height:calc(100vh - 58px);display:flex;align-items:center;justify-content:center;padding:28px}
+.login-box{
+  background:var(--surface);border:1px solid var(--line);border-radius:13px;
+  width:min(480px,100%);padding:34px;box-shadow:0 10px 40px rgba(20,32,46,.08);
+}
+.login-box h2{margin:0 0 6px;font:700 21px var(--disp)}
+.login-note{color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 22px}
+label{display:block;margin:0 0 6px;color:var(--muted);font:600 10.5px var(--mono);text-transform:uppercase;letter-spacing:.1em}
+input,select,textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:7px;
+  background:var(--bg);font:13.5px var(--sans);color:var(--ink);outline:none;transition:.13s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--brand);background:#fff;box-shadow:0 0 0 3px rgba(22,96,201,.1)}
+.group{margin-bottom:15px}
+.hint{font-size:11.5px;color:var(--faint);margin-top:5px;line-height:1.5}
+.hint a{color:var(--brand)}
+.hint code{background:var(--bg);padding:1px 5px;border-radius:3px;font:11px var(--mono)}
+.err{
+  display:none;background:var(--bad-soft);border:1px solid var(--bad);color:var(--bad);
+  font:12px var(--mono);padding:10px 13px;border-radius:7px;margin-bottom:13px;
+}
+.btn{
+  border:1px solid var(--line);background:#fff;border-radius:7px;
+  padding:9px 15px;cursor:pointer;font:600 13px var(--sans);color:var(--ink);transition:.13s;
+}
+.btn:hover{border-color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn-brand{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn-brand:hover{background:#1252ad}
+.btn-block{width:100%;padding:12px;font-size:14px}
+.btn-ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn-ok:hover{background:#176338}
 
-  label { display: block; font-size: 12px; font-weight: 500; margin-bottom: 6px; color: var(--text-muted); font-family: var(--mono); letter-spacing: 0.05em; text-transform: uppercase; }
-  input[type=text], input[type=password], input[type=url], input[type=number], select, textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-family: var(--sans);
-    font-size: 13.5px;
-    background: var(--bg);
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(200,51,10,0.08);
-  }
-  .form-group { margin-bottom: 16px; }
-  .form-hint { font-size: 11px; color: var(--text-light); margin-top: 5px; line-height: 1.5; }
-  .form-hint a { color: var(--blue); }
+/* ───── APP ───── */
+.app{display:none}
+.layout{display:flex;min-height:calc(100vh - 58px);align-items:stretch}
+nav{
+  width:212px;min-width:212px;background:var(--surface);
+  border-right:1px solid var(--line);padding:16px 0;
+}
+.nav-label{font:600 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding:8px 18px}
+.nav-btn{
+  display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;
+  text-align:left;padding:10px 18px;cursor:pointer;color:var(--muted);
+  border-left:3px solid transparent;font:13px var(--sans);transition:.12s;
+}
+.nav-btn:hover{background:var(--bg);color:var(--ink)}
+.nav-btn.on{background:var(--brand-soft);color:var(--brand-deep);border-left-color:var(--brand);font-weight:600}
 
-  .btn-primary {
-    width: 100%;
-    padding: 12px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 8px;
-  }
-  .btn-primary:hover { background: var(--accent-hover); }
-  .btn-primary:disabled { opacity: 0.5; cursor: default; }
+main{flex:1;padding:22px 28px;min-width:0;overflow-x:auto}
 
-  /* MAIN ADMIN */
-  #adminScreen { display: none; }
+/* ───── PENDING BAR — the 2-step save made obvious ───── */
+.pending-bar{
+  display:none;align-items:center;gap:14px;flex-wrap:wrap;
+  background:#fff8ec;border:1.5px solid #e8b04b;border-radius:10px;
+  padding:13px 18px;margin-bottom:16px;
+}
+.pending-bar.show{display:flex}
+.pending-bar .pulse{
+  width:9px;height:9px;border-radius:50%;background:#e8940b;flex-shrink:0;
+  animation:pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.pending-text{flex:1;min-width:200px;font:13px var(--sans);color:#7a5200}
+.pending-text b{font-weight:700}
 
-  .admin-layout {
-    display: flex;
-    min-height: calc(100vh - 56px);
-  }
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.top h2{margin:0;font:700 19px var(--disp)}
+.top p{margin:3px 0 0;color:var(--muted);font-size:13px}
 
-  /* Admin sidebar */
-  .admin-sidebar {
-    width: 240px;
-    min-width: 240px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 20px 0;
-  }
-  .admin-nav-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-light);
-    padding: 10px 20px 4px;
-  }
-  .admin-nav-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    text-align: left;
-    padding: 10px 20px;
-    background: none;
-    border: none;
-    font-family: var(--sans);
-    font-size: 13px;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.15s;
-    border-left: 2px solid transparent;
-  }
-  .admin-nav-btn:hover { background: var(--bg); color: var(--text); }
-  .admin-nav-btn.active { color: var(--accent); background: var(--accent-light); border-left-color: var(--accent); font-weight: 500; }
-  .admin-nav-btn .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.status{
+  padding:10px 15px;border-radius:8px;margin-bottom:14px;
+  font:12px var(--mono);border:1px solid var(--line);background:#fff;color:var(--muted);
+}
+.status.ok{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.status.bad{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
 
-  /* Admin main */
-  .admin-main {
-    flex: 1;
-    padding: 28px 32px;
-    overflow: auto;
-  }
+.panel{display:none}
+.panel.on{display:block}
 
-  .panel { display: none; }
-  .panel.active { display: block; }
+.tbl-wrap{background:var(--surface);border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.tbl-tools{display:flex;gap:8px;padding:12px;background:#f7f9fa;border-bottom:1px solid var(--line);flex-wrap:wrap;align-items:center}
+.tbl-tools input{flex:1;min-width:190px;background:#fff}
 
-  .panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    gap: 16px;
-  }
-  .panel-header h2 { font-size: 18px; font-weight: 600; }
-  .panel-header p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.chip{
+  padding:7px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;
+  font:500 12px var(--sans);color:var(--muted);cursor:pointer;transition:.13s;white-space:nowrap;
+}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand);font-weight:600}
 
-  /* Table */
-  .data-table-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .table-toolbar {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .table-search {
-    flex: 1;
-    min-width: 200px;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-family: var(--sans);
-    font-size: 13px;
-    background: var(--surface);
-    outline: none;
-  }
-  .table-search:focus { border-color: var(--accent); }
-  .filter-chip {
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    font-size: 12px;
-    background: var(--surface);
-    cursor: pointer;
-    font-family: var(--mono);
-    color: var(--text-muted);
-    transition: all 0.15s;
-  }
-  .filter-chip.active {
-    background: var(--accent-light);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+table{width:100%;border-collapse:collapse}
+th{
+  padding:9px 14px;background:#f7f9fa;border-bottom:1px solid var(--line);
+  text-align:left;color:var(--faint);font:600 10px var(--mono);
+  text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;
+}
+td{padding:10px 14px;border-bottom:1px solid var(--line-soft);font-size:12.5px;vertical-align:middle}
+tbody tr:hover td{background:#fafbfc}
+.td-code{font:600 12px var(--mono);color:var(--muted);white-space:nowrap}
+.td-name{font-weight:600;max-width:320px}
+.td-name small{display:block;color:var(--faint);font-weight:400;font-size:11px;margin-top:2px}
+.td-num{font:12px var(--mono);white-space:nowrap}
+.pdf-yes{color:var(--brand);font:600 11px var(--mono)}
+.pdf-no{color:#c4ccd4}
 
-  table { width: 100%; border-collapse: collapse; }
-  th {
-    padding: 10px 16px;
-    text-align: left;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-    white-space: nowrap;
-  }
-  td {
-    padding: 10px 16px;
-    font-size: 12.5px;
-    border-bottom: 1px solid var(--bg);
-    vertical-align: middle;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--bg); }
+.row-btn{
+  padding:6px 13px;border:1px solid var(--line);border-radius:6px;background:#fff;
+  cursor:pointer;font:600 11px var(--mono);color:var(--muted);transition:.13s;white-space:nowrap;
+}
+.row-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-soft)}
+.row-btn.pdf{border-color:#c7dcf7;color:var(--brand);background:var(--brand-soft)}
+.row-btn.edited{border-color:#e8b04b;color:#a06800;background:#fff8ec}
 
-  .td-code { font-family: var(--mono); font-size: 11px; color: var(--text-light); }
-  .td-name { font-weight: 500; max-width: 280px; }
-  .td-name small { display: block; font-size: 11px; color: var(--text-muted); font-weight: 400; margin-top: 1px; }
-  .td-price { font-family: var(--mono); font-size: 12px; white-space: nowrap; }
-  .td-stock { font-family: var(--mono); font-size: 12px; text-align: center; }
+.pager{display:flex;gap:6px;align-items:center;padding:12px 14px;background:#f7f9fa;border-top:1px solid var(--line);flex-wrap:wrap}
+.pg{
+  min-width:31px;height:31px;border:1px solid var(--line);background:#fff;border-radius:6px;
+  cursor:pointer;font:500 11.5px var(--mono);color:var(--muted);
+  display:inline-flex;align-items:center;justify-content:center;padding:0 8px;transition:.12s;
+}
+.pg:hover:not(:disabled):not(.on){border-color:var(--brand);color:var(--brand)}
+.pg.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.pg:disabled{opacity:.35;cursor:default}
+.pg-info{margin-left:auto;color:var(--faint);font:11px var(--mono)}
 
-  .status-dot {
-    display: inline-block;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    margin-right: 5px;
-  }
-  .dot-green { background: var(--green); }
-  .dot-orange { background: #E87010; }
-  .dot-red { background: var(--red); }
-  .dot-gray { background: #B0ABA3; }
+/* ───── MODAL ───── */
+.modal-wrap{
+  position:fixed;inset:0;background:rgba(14,24,38,.55);display:none;
+  align-items:flex-start;justify-content:center;padding:32px 18px;z-index:100;overflow-y:auto;
+}
+.modal-wrap.open{display:flex}
+.modal{
+  background:var(--surface);border-radius:13px;width:min(640px,100%);
+  box-shadow:0 24px 70px rgba(14,24,38,.3);margin-bottom:32px;
+}
+.modal-head{
+  padding:17px 24px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;
+  position:sticky;top:0;background:#fff;border-radius:13px 13px 0 0;z-index:1;
+}
+.modal-head h3{margin:0;font:700 16px var(--disp)}
+.modal-head .mc{font:600 12px var(--mono);color:var(--faint);margin-top:2px;display:block}
+.x{background:none;border:0;font-size:19px;color:var(--faint);cursor:pointer;padding:4px 6px;line-height:1}
+.x:hover{color:var(--ink)}
+.modal-body{padding:22px 24px}
+.modal-foot{
+  padding:15px 24px;border-top:1px solid var(--line);
+  display:flex;justify-content:flex-end;gap:10px;
+  position:sticky;bottom:0;background:#fff;border-radius:0 0 13px 13px;
+}
+.cols-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cols-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 
-  .edit-btn {
-    padding: 5px 12px;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    font-size: 11px;
-    font-family: var(--mono);
-    cursor: pointer;
-    color: var(--text-muted);
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .edit-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
-  .edit-btn.has-manual { border-color: var(--blue); color: var(--blue); background: var(--blue-bg); }
+/* PDF field highlight */
+.pdf-field{
+  background:var(--brand-soft);border:1.5px solid var(--brand);border-radius:9px;
+  padding:15px;margin:4px 0 15px;
+}
+.pdf-field label{color:var(--brand-deep)}
+.pdf-field input{background:#fff}
+.pdf-field .hint{color:#3d6db5}
+.pdf-now{
+  display:none;margin-top:8px;padding:8px 11px;background:#fff;border-radius:6px;
+  font:11px var(--mono);color:var(--brand);word-break:break-all;border:1px solid #c7dcf7;
+}
 
-  /* Edit Modal */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.45);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-  }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal {
-    background: var(--surface);
-    border-radius: 12px;
-    width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    transform: translateY(16px);
-    transition: transform 0.2s;
-  }
-  .modal-overlay.open .modal { transform: translateY(0); }
-  .modal-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    background: var(--surface);
-    z-index: 1;
-  }
-  .modal-header h3 { font-size: 15px; font-weight: 600; }
-  .modal-header small { font-size: 11px; color: var(--text-muted); font-family: var(--mono); display: block; margin-top: 1px; }
-  .close-btn {
-    background: none; border: none;
-    font-size: 20px; color: var(--text-muted);
-    cursor: pointer; line-height: 1;
-    padding: 4px;
-  }
-  .close-btn:hover { color: var(--text); }
-  .modal-body { padding: 24px; }
-  .modal-footer {
-    padding: 16px 24px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-  }
-  .btn-save {
-    padding: 10px 24px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn-save:hover { background: var(--accent-hover); }
-  .btn-save:disabled { opacity: 0.5; cursor: default; }
-  .btn-cancel {
-    padding: 10px 20px;
-    background: white;
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-family: var(--sans);
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .btn-cancel:hover { border-color: var(--text-muted); color: var(--text); }
+/* ───── STATS ───── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.stat b{display:block;font:700 26px var(--mono);letter-spacing:-.01em}
+.stat span{font-size:12px;color:var(--muted)}
+.stat.hl b{color:var(--brand)}
 
-  /* Toast */
-  .toast {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
-    background: var(--text);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: var(--mono);
-    z-index: 9999;
-    transform: translateY(20px);
-    opacity: 0;
-    transition: all 0.3s;
-    max-width: 360px;
-  }
-  .toast.show { transform: translateY(0); opacity: 1; }
-  .toast.success { background: var(--green); }
-  .toast.error { background: var(--red); }
+/* ───── TOAST ───── */
+.toast{
+  position:fixed;right:22px;bottom:22px;background:var(--ink);color:#fff;
+  border-radius:9px;padding:13px 19px;font:13px var(--sans);font-weight:500;
+  display:none;max-width:420px;z-index:200;box-shadow:0 10px 34px rgba(14,24,38,.3);
+}
+.toast.show{display:block}
+.toast.ok{background:var(--ok)}
+.toast.bad{background:var(--bad)}
 
-  /* Stats cards */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
-  }
-  .stat-card .stat-val {
-    font-family: var(--mono);
-    font-size: 26px;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-  .stat-card .stat-label {
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  .section-divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 20px 0;
-  }
-
-  .github-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-family: var(--mono);
-    border: 1px solid var(--border);
-    background: var(--bg);
-    margin-bottom: 20px;
-  }
-  .github-status.connected { background: var(--green-bg); border-color: var(--green); color: var(--green); }
-  .github-status.error { background: var(--red-bg); border-color: var(--red); color: var(--red); }
-
-  .pagination-small {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    padding: 14px 16px;
-    border-top: 1px solid var(--border);
-    background: var(--bg);
-  }
-  .pg-btn {
-    min-width: 30px;
-    height: 30px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    border-radius: 4px;
-    font-family: var(--mono);
-    font-size: 11px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 8px;
-    color: var(--text-muted);
-    transition: all 0.15s;
-  }
-  .pg-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-  .pg-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-  .pg-btn:disabled { opacity: 0.3; cursor: default; }
-  .pg-info { font-family: var(--mono); font-size: 11px; color: var(--text-muted); margin-left: auto; }
+@media(max-width:840px){
+  .layout{flex-direction:column}
+  nav{width:100%;min-width:0;display:flex;overflow-x:auto;padding:8px}
+  .nav-label{display:none}
+  .nav-btn{border-left:0;border-bottom:3px solid transparent;white-space:nowrap;width:auto}
+  .nav-btn.on{border-left:0;border-bottom-color:var(--brand)}
+  main{padding:14px}
+  .cols-2,.cols-3{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-brand"><span>Ч</span> ЧИГЛЭЛ — ADMIN PANEL</div>
-  <div class="header-right">
-    <a href="../index.html">← Каталог руу буцах</a>
+  <div class="brand">
+    <span class="brand-mark">Ч</span>
+    <span class="brand-name">CHIGLEL<small>ADMIN PANEL</small></span>
   </div>
+  <a class="back" href="../index.html">← Back to catalog</a>
 </header>
 
 <!-- LOGIN -->
-<div id="loginScreen">
-  <div class="login-card">
-    <div class="login-icon">🔐</div>
-    <h2>Admin нэвтрэх</h2>
-    <p>GitHub Personal Access Token ашиглан нэвтэрнэ. Token нь бараа мэдээлэл засах эрхтэй байх ёстой.</p>
+<div class="login" id="loginScreen">
+  <div class="login-box">
+    <h2>Admin sign in</h2>
+    <p class="login-note">Sign in with a GitHub personal access token. Changes are committed straight to the repository.</p>
 
-    <div class="form-group">
-      <label>GitHub Repository</label>
-      <input type="text" id="repoInput" placeholder="username/chiglel-catalog" value="">
-      <div class="form-hint">Жишээ: <code>mycompany/chiglel-catalog</code></div>
+    <div class="group">
+      <label>GitHub repository</label>
+      <input type="text" id="repo" placeholder="username/baraa-medeelel" autocomplete="off">
+      <div class="hint">Format: <code>username/reponame</code> — not a URL</div>
     </div>
-    <div class="form-group">
-      <label>GitHub Token (Personal Access Token)</label>
-      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-      <div class="form-hint">
-        <a href="https://github.com/settings/tokens/new?scopes=repo&description=Chiglel+Admin" target="_blank">
-          🔗 Token үүсгэх
-        </a> — Contents: Read/Write эрх сонго
-      </div>
+    <div class="group">
+      <label>GitHub token</label>
+      <input type="password" id="token" placeholder="ghp_… or github_pat_…" autocomplete="off">
+      <div class="hint"><a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">Create a fine-grained token ↗</a> — Repository access: this repo only · Permissions: Contents → Read and write</div>
     </div>
-    <div id="loginError" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none;font-family:var(--mono);"></div>
-    <button class="btn-primary" id="loginBtn" onclick="doLogin()">Нэвтрэх →</button>
-
-    <hr class="section-divider">
-    <div style="font-size:12px;color:var(--text-light);line-height:1.7;">
-      <strong>Анхны тохируулга:</strong><br>
-      1. GitHub-д <code>chiglel-catalog</code> repository үүсгэх<br>
-      2. Эдгээр файлуудыг upload хийх<br>
-      3. Settings → Pages → main branch идэвхжүүлэх<br>
-      4. Token үүсгэж нэвтрэх
-    </div>
+    <div class="err" id="loginErr"></div>
+    <button class="btn btn-brand btn-block" id="loginBtn">Sign in →</button>
   </div>
 </div>
 
-<!-- ADMIN MAIN -->
-<div id="adminScreen">
-  <div class="admin-layout">
-    <aside class="admin-sidebar">
-      <div class="admin-nav-label">Удирдлага</div>
-      <button class="admin-nav-btn active" onclick="showPanel('products')">
-        <span class="nav-icon">📦</span> Бараа жагсаалт
-      </button>
-      <button class="admin-nav-btn" onclick="showPanel('manuals')">
-        <span class="nav-icon">📄</span> Гарын авлага
-      </button>
-      <button class="admin-nav-btn" onclick="showPanel('stats')">
-        <span class="nav-icon">📊</span> Статистик
-      </button>
-      <div class="admin-nav-label" style="margin-top:16px">Систем</div>
-      <button class="admin-nav-btn" onclick="showPanel('settings')">
-        <span class="nav-icon">⚙️</span> Тохиргоо
-      </button>
-      <button class="admin-nav-btn" onclick="doLogout()" style="margin-top:auto">
-        <span class="nav-icon">🚪</span> Гарах
-      </button>
-    </aside>
+<!-- APP -->
+<div class="app" id="app">
+  <div class="layout">
+    <nav>
+      <div class="nav-label">Manage</div>
+      <button class="nav-btn on" data-panel="products">📦 Products</button>
+      <button class="nav-btn" data-panel="manuals">📄 PDF manuals</button>
+      <button class="nav-btn" data-panel="stats">📊 Stats</button>
+      <div class="nav-label" style="margin-top:14px">Account</div>
+      <button class="nav-btn" data-panel="settings">⚙ Settings</button>
+      <button class="nav-btn" id="logoutNav">🚪 Sign out</button>
+    </nav>
 
-    <main class="admin-main">
-
-      <!-- PRODUCTS PANEL -->
-      <div id="panel-products" class="panel active">
-        <div class="panel-header">
-          <div>
-            <h2>Бараа жагсаалт</h2>
-            <p>Барааны мэдээлэл засах, PDF линк нэмэх</p>
-          </div>
-          <button class="btn-save" onclick="saveAllChanges()" id="saveAllBtn" style="display:none">
-            💾 Бүгдийг хадгалах
-          </button>
-        </div>
-        <div id="githubStatus" class="github-status">⏳ GitHub холбоо шалгаж байна...</div>
-        <div class="data-table-wrap">
-          <div class="table-toolbar">
-            <input class="table-search" id="adminSearch" placeholder="Барааны нэр, код хайх..." oninput="adminFilter()">
-            <button class="filter-chip" id="chip-manual" onclick="adminChip('manual')">📄 PDF байхгүй</button>
-            <button class="filter-chip" id="chip-mn" onclick="adminChip('mn')">🇲🇳 Монгол</button>
-          </div>
-          <div id="adminTableWrap">Ачаалж байна...</div>
-        </div>
+    <main>
+      <!-- pending changes bar — always visible at top of every panel -->
+      <div class="pending-bar" id="pendingBar">
+        <span class="pulse"></span>
+        <span class="pending-text" id="pendingText"></span>
+        <button class="btn" id="discardBtn">Discard</button>
+        <button class="btn btn-ok" id="saveAllBtn">Save to GitHub →</button>
       </div>
 
-      <!-- MANUALS PANEL -->
-      <div id="panel-manuals" class="panel">
-        <div class="panel-header">
-          <div>
-            <h2>Гарын авлага</h2>
-            <p>Гарын авлагатай бараануудын PDF линкүүд</p>
+      <!-- PRODUCTS -->
+      <section class="panel on" id="panel-products">
+        <div class="top">
+          <div><h2>Products</h2><p>Edit product fields and attach PDF manuals. Changes queue locally until you save.</p></div>
+          <button class="btn btn-brand" id="addBtn">+ Add product</button>
+        </div>
+        <div class="status" id="ghStatus">Connecting to GitHub…</div>
+        <div class="tbl-wrap">
+          <div class="tbl-tools">
+            <input type="text" id="srch" placeholder="Search name, code, brand, model…" autocomplete="off">
+            <button class="chip" data-chip="nopdf">Missing PDF</button>
+            <button class="chip" data-chip="Монгол">Mongolia</button>
+            <button class="chip" data-chip="Хятад">China</button>
+            <button class="chip" data-chip="Солонгос">Korea</button>
+            <button class="chip" data-chip="Турк">Turkey</button>
+            <button class="chip" data-chip="Орос">Russia</button>
           </div>
+          <div id="prodTable"></div>
         </div>
-        <div class="data-table-wrap">
-          <div id="manualsTableWrap">Ачаалж байна...</div>
-        </div>
-      </div>
+      </section>
 
-      <!-- STATS PANEL -->
-      <div id="panel-stats" class="panel">
-        <div class="panel-header">
-          <div><h2>Статистик</h2><p>Барааны ерөнхий мэдээлэл</p></div>
+      <!-- MANUALS -->
+      <section class="panel" id="panel-manuals">
+        <div class="top">
+          <div><h2>PDF manuals</h2><p>All products that currently have a manual link.</p></div>
         </div>
-        <div id="statsContent">Ачаалж байна...</div>
-      </div>
+        <div class="tbl-wrap"><div id="manualTable"></div></div>
+      </section>
 
-      <!-- SETTINGS PANEL -->
-      <div id="panel-settings" class="panel">
-        <div class="panel-header">
-          <div><h2>Тохиргоо</h2><p>GitHub холболт ба систем тохиргоо</p></div>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:500px;">
-          <div class="form-group">
-            <label>GitHub Repository</label>
-            <input type="text" id="settingsRepo" readonly>
-          </div>
-          <div class="form-group">
-            <label>Token (нуугдсан)</label>
-            <input type="password" id="settingsToken" value="••••••••••••••••••••" readonly>
-          </div>
-          <button class="btn-cancel" onclick="doLogout()">🚪 Гарах / Token солих</button>
-        </div>
-      </div>
+      <!-- STATS -->
+      <section class="panel" id="panel-stats">
+        <div class="top"><div><h2>Stats</h2><p>Catalog overview.</p></div></div>
+        <div id="statsBox"></div>
+      </section>
 
+      <!-- SETTINGS -->
+      <section class="panel" id="panel-settings">
+        <div class="top"><div><h2>Settings</h2><p>Connection details for this session.</p></div></div>
+        <div class="tbl-wrap" style="max-width:480px;padding:22px">
+          <div class="group"><label>Repository</label><input id="setRepo" readonly></div>
+          <div class="group"><label>Token</label><input type="password" value="••••••••••••••••" readonly></div>
+          <div class="hint" style="margin-bottom:14px">The token is kept in memory only for this tab and is never written to storage.</div>
+          <button class="btn" id="logoutBtn">Sign out / change token</button>
+        </div>
+      </section>
     </main>
   </div>
 </div>
 
 <!-- EDIT MODAL -->
-<div class="modal-overlay" id="editModal">
+<div class="modal-wrap" id="modal">
   <div class="modal">
-    <div class="modal-header">
+    <div class="modal-head">
       <div>
-        <h3>Бараа засах</h3>
-        <small id="modalCode">—</small>
+        <h3 id="mTitle">Edit product</h3>
+        <span class="mc" id="mCode"></span>
       </div>
-      <button class="close-btn" onclick="closeModal()">✕</button>
+      <button class="x" id="mClose">✕</button>
     </div>
     <div class="modal-body">
-      <div class="form-group">
-        <label>Барааны нэр</label>
-        <input type="text" id="editName" placeholder="Барааны нэр">
+      <div class="cols-2">
+        <div class="group"><label>Product code *</label><input id="f_code" autocomplete="off"></div>
+        <div class="group"><label>Location</label><input id="f_location" autocomplete="off"></div>
       </div>
-      <div class="form-group">
-        <label>Үнэ (₮)</label>
-        <input type="number" id="editPrice" placeholder="1500000">
+      <div class="group"><label>Product name *</label><input id="f_name" autocomplete="off"></div>
+      <div class="cols-2">
+        <div class="group"><label>Category</label><input id="f_category" autocomplete="off"></div>
+        <div class="group"><label>Subcategory</label><input id="f_subcategory" autocomplete="off"></div>
       </div>
-      <div class="form-group">
-        <label>Гарын авлага (PDF) — Google Drive линк</label>
-        <input type="url" id="editManualUrl" placeholder="https://drive.google.com/file/d/...">
-        <div class="form-hint">
-          Google Drive → файл дээр баруун товш → Share → "Anyone with the link" → линкийг хуулах
+      <div class="cols-3">
+        <div class="group">
+          <label>Origin</label>
+          <select id="f_origin">
+            <option value="">— Select —</option>
+            <option value="Монгол">Монгол</option>
+            <option value="Хятад">Хятад</option>
+            <option value="Солонгос">Солонгос</option>
+            <option value="Турк">Турк</option>
+            <option value="Орос">Орос</option>
+          </select>
         </div>
+        <div class="group">
+          <label>ABC class</label>
+          <select id="f_abc">
+            <option value="">—</option>
+            <option>A</option><option>B</option><option>C</option>
+          </select>
+        </div>
+        <div class="group"><label>Price (₮)</label><input type="number" id="f_price" min="0"></div>
       </div>
-      <div class="form-group">
-        <label>Бренд</label>
-        <input type="text" id="editBrand" placeholder="Чиглэл ХХК">
+      <div class="cols-2">
+        <div class="group"><label>Brand</label><input id="f_brand" autocomplete="off"></div>
+        <div class="group"><label>Model</label><input id="f_model" autocomplete="off"></div>
       </div>
-      <div class="form-group">
-        <label>Марк / Загвар</label>
-        <input type="text" id="editModel" placeholder="ЧШШ-2-4">
+
+      <div class="pdf-field">
+        <label>📄 User manual — Google Drive link</label>
+        <input type="url" id="f_manual_url" placeholder="https://drive.google.com/file/d/…/view?usp=sharing" autocomplete="off">
+        <div class="hint">Google Drive → file → Share → "Anyone with the link" → Copy link → paste here</div>
+        <div class="pdf-now" id="pdfNow"></div>
       </div>
-      <div class="form-group">
-        <label>Онцлог / Тэмдэглэл</label>
-        <textarea id="editFeatures" rows="3" placeholder="Нэмэлт мэдээлэл..."></textarea>
+
+      <div class="group"><label>Features / note</label><textarea id="f_features" rows="2"></textarea></div>
+      <div class="cols-3">
+        <div class="group"><label>Length (mm)</label><input type="number" id="f_length" min="0"></div>
+        <div class="group"><label>Width (mm)</label><input type="number" id="f_width" min="0"></div>
+        <div class="group"><label>Height (mm)</label><input type="number" id="f_height" min="0"></div>
       </div>
-      <div class="form-group">
-        <label>Гарал үүсэл</label>
-        <select id="editOrigin">
-          <option value="">—</option>
-          <option value="Монгол">Монгол</option>
-          <option value="Хятад">Хятад</option>
-          <option value="Солонгос">Солонгос</option>
-          <option value="Турк">Турк</option>
-          <option value="Итали">Итали</option>
-        </select>
+      <div class="cols-3">
+        <div class="group"><label>Weight (kg)</label><input type="number" id="f_weight" step="0.1" min="0"></div>
+        <div class="group"><label>Voltage (V)</label><input type="number" id="f_voltage" min="0"></div>
+        <div class="group"><label>Power (kW)</label><input type="number" id="f_power_kw" step="0.01" min="0"></div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()">Болих</button>
-      <button class="btn-save" id="modalSaveBtn" onclick="saveProduct()">💾 Хадгалах</button>
+    <div class="modal-foot">
+      <button class="btn" id="mCancel">Cancel</button>
+      <button class="btn btn-brand" id="mSave">Queue change</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ── STATE ──
-let products = [];
-let adminFiltered = [];
-let adminPage = 1;
-const ADMIN_PAGE = 50;
-let editingCode = null;
-let pendingChanges = {};
-let githubToken = '';
-let githubRepo = '';
-let activeChips = new Set();
+'use strict';
+/* ───────── state ───────── */
+let products=[], pending={}, adds={}, chips=new Set();
+let repo='', token='', editing=null, adding=false, prodPage=1;
+const SIZE=50;
+const $=id=>document.getElementById(id);
+const val=id=>$(id).value.trim();
+const num=id=>{const v=val(id);return v===''?null:Number(v)};
+const setV=(id,v)=>{$(id).value=(v===null||v===undefined)?'':v};
 
-// ── AUTH ──
-function doLogin() {
-  const repo = document.getElementById('repoInput').value.trim();
-  const token = document.getElementById('tokenInput').value.trim();
-  if (!repo || !token) { showLoginError('Repository болон Token оруулна уу'); return; }
-  if (!repo.includes('/')) { showLoginError('Repository формат буруу: username/reponame'); return; }
+const el=(tag,cls,text)=>{
+  const e=document.createElement(tag);
+  if(cls)e.className=cls;
+  if(text!==undefined&&text!==null)e.textContent=String(text);
+  return e;
+};
 
-  githubRepo = repo;
-  githubToken = token;
-  const btn = document.getElementById('loginBtn');
-  btn.disabled = true;
-  btn.textContent = 'Шалгаж байна...';
-
-  // Verify token by fetching repo
-  fetch(`https://api.github.com/repos/${githubRepo}`, {
-    headers: { Authorization: `token ${githubToken}` }
-  }).then(r => {
-    if (!r.ok) throw new Error(r.status === 401 ? 'Token буруу байна' : 'Repository олдсонгүй');
-    return r.json();
-  }).then(() => {
-    // Save to sessionStorage
-    sessionStorage.setItem('gh_repo', githubRepo);
-    sessionStorage.setItem('gh_token', githubToken);
-    showAdmin();
-  }).catch(e => {
-    showLoginError(e.message);
-    btn.disabled = false;
-    btn.textContent = 'Нэвтрэх →';
-  });
+function toast(msg,type=''){
+  const t=$('toast');
+  t.textContent=msg;
+  t.className='toast '+type+' show';
+  clearTimeout(t._h);
+  t._h=setTimeout(()=>t.classList.remove('show'),3600);
 }
 
-function showLoginError(msg) {
-  const el = document.getElementById('loginError');
-  el.textContent = '⚠ ' + msg;
-  el.style.display = 'block';
+/* ───────── auth ───────── */
+function authH(){return{Authorization:'Bearer '+token}}
+
+async function doLogin(){
+  const r=val('repo'),t=val('token');
+  const errEl=$('loginErr');
+  errEl.style.display='none';
+  if(!r||!t){showErr('Repository and token are both required.');return}
+  if(!r.includes('/')||r.includes('http')||r.includes('github.io')){
+    showErr('Use the format username/reponame — for example bayarchiglel/baraa-medeelel');return;
+  }
+  repo=r;token=t;
+  const btn=$('loginBtn');
+  btn.disabled=true;btn.textContent='Checking…';
+  try{
+    const res=await fetch('https://api.github.com/repos/'+repo,{headers:authH()});
+    if(res.status===401)throw new Error('Token was rejected — check it has not expired.');
+    if(res.status===404)throw new Error('Repository not found: '+repo+' — check spelling and token access.');
+    if(!res.ok)throw new Error('GitHub error '+res.status);
+    sessionStorage.setItem('gh_repo',repo);
+    await showApp();
+  }catch(e){
+    showErr(e.message);
+  }finally{
+    btn.disabled=false;btn.textContent='Sign in →';
+  }
+}
+function showErr(m){const e=$('loginErr');e.textContent=m;e.style.display='block'}
+function doLogout(){
+  token='';repo='';pending={};adds={};
+  $('loginScreen').style.display='flex';
+  $('app').style.display='none';
 }
 
-function doLogout() {
-  sessionStorage.removeItem('gh_repo');
-  sessionStorage.removeItem('gh_token');
-  githubToken = '';
-  githubRepo = '';
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('adminScreen').style.display = 'none';
-}
-
-async function showAdmin() {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('adminScreen').style.display = 'block';
-  document.getElementById('settingsRepo').value = githubRepo;
-
+async function showApp(){
+  $('loginScreen').style.display='none';
+  $('app').style.display='block';
+  $('setRepo').value=repo;
   await loadProducts();
-  checkGitHubStatus();
-  buildAdminTable();
-  buildStatsPanel();
+  checkGH();
+  renderAll();
 }
 
-// ── LOAD DATA ──
-async function loadProducts() {
-  const res = await fetch('../data/products.json?_=' + Date.now());
-  products = await res.json();
-  adminFiltered = [...products];
+/* ───────── data ───────── */
+async function loadProducts(){
+  const r=await fetch('../data/products.json?_='+Date.now());
+  products=await r.json();
 }
+function merged(){
+  return products
+    .map(p=>pending[p.code]?{...p,...pending[p.code]}:p)
+    .concat(Object.values(adds));
+}
+function pendingCount(){return Object.keys(pending).length+Object.keys(adds).length}
 
-// ── GITHUB STATUS ──
-async function checkGitHubStatus() {
-  const el = document.getElementById('githubStatus');
-  try {
-    const r = await fetch(`https://api.github.com/repos/${githubRepo}/contents/data/products.json`, {
-      headers: { Authorization: `token ${githubToken}` }
-    });
-    if (r.ok) {
-      el.className = 'github-status connected';
-      el.textContent = `✓ GitHub холбогдсон — ${githubRepo}`;
-    } else throw new Error();
-  } catch {
-    el.className = 'github-status error';
-    el.textContent = '✗ GitHub холбоо алдаатай — өгөгдөл хадгалагдахгүй';
+async function checkGH(){
+  const s=$('ghStatus');
+  try{
+    const r=await fetch('https://api.github.com/repos/'+repo+'/contents/data/products.json',{headers:authH()});
+    if(!r.ok)throw 0;
+    s.className='status ok';
+    s.textContent='✓ Connected — '+repo+' · data/products.json found';
+  }catch{
+    s.className='status bad';
+    s.textContent='✗ Cannot reach data/products.json in '+repo+' — saving will fail';
   }
 }
 
-// ── ADMIN TABLE ──
-function buildAdminTable() {
-  adminFiltered = products.filter(p => {
-    const q = document.getElementById('adminSearch').value.trim().toLowerCase();
-    if (q) {
-      const hay = [p.name, p.code, p.brand, p.model].filter(Boolean).join(' ').toLowerCase();
-      if (!hay.includes(q)) return false;
+/* ───────── render ───────── */
+function renderAll(){
+  renderPending();
+  renderProducts();
+  renderManuals();
+  renderStats();
+}
+
+function renderPending(){
+  const n=pendingCount();
+  const bar=$('pendingBar');
+  if(!n){bar.classList.remove('show');return}
+  bar.classList.add('show');
+  const e=Object.keys(pending).length, a=Object.keys(adds).length;
+  const parts=[];
+  if(e)parts.push(e+' edit'+(e>1?'s':''));
+  if(a)parts.push(a+' new product'+(a>1?'s':''));
+  $('pendingText').innerHTML='<b>'+parts.join(' and ')+'</b> queued — nothing is saved until you click <b>Save to GitHub</b>.';
+}
+
+function filteredList(){
+  const q=val('srch').toLowerCase();
+  return merged().filter(p=>{
+    if(chips.has('nopdf')&&p.manual_url)return false;
+    const originChips=[...chips].filter(c=>c!=='nopdf');
+    if(originChips.length&&!originChips.includes(p.origin))return false;
+    if(q){
+      const hay=[p.name,p.code,p.brand,p.model,p.category,p.subcategory].filter(Boolean).join(' ').toLowerCase();
+      if(!hay.includes(q))return false;
     }
-    if (activeChips.has('manual') && p.manual_url) return false;
-    if (activeChips.has('mn') && p.origin !== 'Монгол') return false;
     return true;
   });
-
-  adminPage = 1;
-  renderAdminTable();
 }
 
-function renderAdminTable() {
-  const start = (adminPage - 1) * ADMIN_PAGE;
-  const slice = adminFiltered.slice(start, start + ADMIN_PAGE);
-  const totalPages = Math.ceil(adminFiltered.length / ADMIN_PAGE);
+function renderProducts(){
+  const list=filteredList();
+  const root=$('prodTable');
+  root.innerHTML='';
 
-  let html = `<table>
-    <thead><tr>
-      <th>Код</th><th>Барааны нэр</th><th>Үнэ</th><th>Нөөц</th><th>PDF</th><th></th>
-    </tr></thead><tbody>`;
+  const table=el('table');
+  const thead=el('thead'),hr=el('tr');
+  ['Code','Name','Origin','Price','PDF',''].forEach(h=>hr.appendChild(el('th',null,h)));
+  thead.appendChild(hr);table.appendChild(thead);
 
-  slice.forEach(p => {
-    const changed = pendingChanges[p.code];
-    const cur = changed ? { ...p, ...changed } : p;
-    const hasPdf = cur.manual_url;
-    const stockDot = cur.stock === 0 ? 'dot-red' : cur.stock <= 3 ? 'dot-orange' : cur.stock ? 'dot-green' : 'dot-gray';
+  const tbody=el('tbody');
+  list.slice((prodPage-1)*SIZE,prodPage*SIZE).forEach(p=>{
+    const tr=el('tr');
+    tr.appendChild(el('td','td-code','#'+p.code));
 
-    html += `<tr>
-      <td class="td-code">#${p.code}</td>
-      <td class="td-name">
-        ${cur.name || '—'}
-        <small>${p.category || ''} ${p.subcategory ? '/ ' + p.subcategory : ''}</small>
-      </td>
-      <td class="td-price">${cur.price ? cur.price.toLocaleString() + ' ₮' : '—'}</td>
-      <td class="td-stock"><span class="status-dot ${stockDot}"></span>${cur.stock !== null ? cur.stock : '—'}</td>
-      <td style="text-align:center">${hasPdf ? '✅' : '—'}</td>
-      <td><button class="edit-btn ${hasPdf ? 'has-manual' : ''}" onclick="openEdit('${p.code}')">
-        ${changed ? '✏ засагдсан' : '✏ засах'}
-      </button></td>
-    </tr>`;
+    const tn=el('td','td-name',p.name||'—');
+    tn.appendChild(el('small',null,[p.category,p.subcategory].filter(Boolean).join(' / ')));
+    tr.appendChild(tn);
+
+    tr.appendChild(el('td','td-num',p.origin||'—'));
+    tr.appendChild(el('td','td-num',p.price?Number(p.price).toLocaleString()+' ₮':'—'));
+
+    const tp=el('td');
+    tp.appendChild(el('span',p.manual_url?'pdf-yes':'pdf-no',p.manual_url?'✓ PDF':'—'));
+    tr.appendChild(tp);
+
+    const ta=el('td');
+    const changed=!!(pending[p.code]||adds[p.code]);
+    const b=el('button','row-btn'+(changed?' edited':p.manual_url?' pdf':''),changed?'● edited':'Edit');
+    b.onclick=()=>openEdit(p.code);
+    ta.appendChild(b);
+    tr.appendChild(ta);
+    tbody.appendChild(tr);
   });
+  table.appendChild(tbody);
+  root.appendChild(table);
 
-  html += `</tbody></table>`;
-
-  // Pagination
-  let pgHtml = `<div class="pagination-small">
-    <button class="pg-btn" onclick="adminGoPage(${adminPage-1})" ${adminPage===1?'disabled':''}>←</button>`;
-
-  for (let i = Math.max(1, adminPage-2); i <= Math.min(totalPages, adminPage+2); i++) {
-    pgHtml += `<button class="pg-btn ${i===adminPage?'active':''}" onclick="adminGoPage(${i})">${i}</button>`;
-  }
-  pgHtml += `<button class="pg-btn" onclick="adminGoPage(${adminPage+1})" ${adminPage===totalPages?'disabled':''}>→</button>
-    <span class="pg-info">${adminFiltered.length} бараа / нийт ${products.length}</span>
-  </div>`;
-
-  document.getElementById('adminTableWrap').innerHTML = html + pgHtml;
-
-  const hasPending = Object.keys(pendingChanges).length > 0;
-  document.getElementById('saveAllBtn').style.display = hasPending ? 'block' : 'none';
-}
-
-function adminGoPage(p) {
-  const total = Math.ceil(adminFiltered.length / ADMIN_PAGE);
-  if (p < 1 || p > total) return;
-  adminPage = p;
-  renderAdminTable();
-}
-
-function adminFilter() { buildAdminTable(); }
-
-function adminChip(chip) {
-  activeChips.has(chip) ? activeChips.delete(chip) : activeChips.add(chip);
-  document.getElementById('chip-' + chip).classList.toggle('active', activeChips.has(chip));
-  buildAdminTable();
-}
-
-// ── EDIT MODAL ──
-function openEdit(code) {
-  const base = products.find(p => p.code === code);
-  const cur = pendingChanges[code] ? { ...base, ...pendingChanges[code] } : base;
-  editingCode = code;
-
-  document.getElementById('modalCode').textContent = `#${code}`;
-  document.getElementById('editName').value = cur.name || '';
-  document.getElementById('editPrice').value = cur.price || '';
-  document.getElementById('editManualUrl').value = cur.manual_url || '';
-  document.getElementById('editBrand').value = cur.brand || '';
-  document.getElementById('editModel').value = cur.model || '';
-  document.getElementById('editFeatures').value = cur.features || '';
-  document.getElementById('editOrigin').value = cur.origin || '';
-
-  document.getElementById('editModal').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('editModal').classList.remove('open');
-  editingCode = null;
-}
-
-function saveProduct() {
-  if (!editingCode) return;
-  const changes = {
-    name: document.getElementById('editName').value.trim() || null,
-    price: parseInt(document.getElementById('editPrice').value) || null,
-    manual_url: document.getElementById('editManualUrl').value.trim() || null,
-    has_manual: !!document.getElementById('editManualUrl').value.trim(),
-    brand: document.getElementById('editBrand').value.trim() || null,
-    model: document.getElementById('editModel').value.trim() || null,
-    features: document.getElementById('editFeatures').value.trim() || null,
-    origin: document.getElementById('editOrigin').value || null,
+  // pager
+  const total=Math.max(1,Math.ceil(list.length/SIZE));
+  if(prodPage>total)prodPage=total;
+  const pager=el('div','pager');
+  const mk=(label,p,dis,on)=>{
+    const b=el('button','pg'+(on?' on':''),label);
+    b.disabled=!!dis;
+    b.onclick=()=>{prodPage=p;renderProducts()};
+    pager.appendChild(b);
   };
-
-  pendingChanges[editingCode] = changes;
-  closeModal();
-  renderAdminTable();
-  showToast('✏ Засвар хийгдлээ — "Бүгдийг хадгалах" дарж GitHub-д хадгална', 'success');
+  mk('←',prodPage-1,prodPage===1);
+  for(let i=Math.max(1,prodPage-2);i<=Math.min(total,prodPage+2);i++)mk(i,i,false,i===prodPage);
+  mk('→',prodPage+1,prodPage===total);
+  pager.appendChild(el('span','pg-info',list.length+' shown · '+merged().length+' total'));
+  root.appendChild(pager);
 }
 
-// ── SAVE TO GITHUB ──
-async function saveAllChanges() {
-  if (!Object.keys(pendingChanges).length) return;
-  const btn = document.getElementById('saveAllBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳ Хадгалж байна...';
+function renderManuals(){
+  const list=merged().filter(p=>p.manual_url);
+  const root=$('manualTable');
+  root.innerHTML='';
+  if(!list.length){
+    const d=el('div',null,'No manual links yet. Open a product and paste a Google Drive link in the PDF field.');
+    d.style.cssText='padding:42px;text-align:center;color:var(--faint);font-size:13px';
+    root.appendChild(d);
+    return;
+  }
+  const table=el('table');
+  const hr=el('tr');
+  ['Code','Name','Link',''].forEach(h=>hr.appendChild(el('th',null,h)));
+  table.appendChild(hr);
+  list.forEach(p=>{
+    const tr=el('tr');
+    tr.appendChild(el('td','td-code','#'+p.code));
+    tr.appendChild(el('td','td-name',p.name||'—'));
+    const tl=el('td');
+    const a=el('a',null,p.manual_url.length>58?p.manual_url.slice(0,58)+'…':p.manual_url);
+    a.href=p.manual_url;a.target='_blank';a.rel='noopener';
+    a.style.cssText='color:var(--brand);font:11px var(--mono);text-decoration:none;word-break:break-all';
+    tl.appendChild(a);tr.appendChild(tl);
+    const ta=el('td');
+    const b=el('button','row-btn pdf','Edit');
+    b.onclick=()=>{showPanel('products');openEdit(p.code)};
+    ta.appendChild(b);tr.appendChild(ta);
+    table.appendChild(tr);
+  });
+  root.appendChild(table);
+}
 
-  // Merge changes into products
-  const updated = products.map(p => {
-    if (pendingChanges[p.code]) {
-      return { ...p, ...pendingChanges[p.code] };
+function renderStats(){
+  const list=merged();
+  const root=$('statsBox');
+  root.innerHTML='';
+  const grid=el('div','stats-grid');
+  const mkStat=(label,v,hl)=>{
+    const c=el('div','stat'+(hl?' hl':''));
+    c.append(el('b',null,v),el('span',null,label));
+    grid.appendChild(c);
+  };
+  mkStat('Total products',list.length);
+  mkStat('With PDF manual',list.filter(p=>p.manual_url).length,true);
+  mkStat('Queued changes',pendingCount());
+  const origins={};
+  list.forEach(p=>{if(p.origin)origins[p.origin]=(origins[p.origin]||0)+1});
+  Object.entries(origins).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>mkStat(k,v));
+  root.appendChild(grid);
+
+  const cats={};
+  list.forEach(p=>{const k=p.category||'—';cats[k]=(cats[k]||0)+1});
+  const wrap=el('div','tbl-wrap');
+  const title=el('div',null,'By category');
+  title.style.cssText='padding:10px 16px;background:#f7f9fa;border-bottom:1px solid var(--line);font:600 10px var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--faint)';
+  wrap.appendChild(title);
+  const table=el('table');
+  Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{
+    const tr=el('tr');
+    tr.append(el('td',null,k),el('td','td-num',v));
+    table.appendChild(tr);
+  });
+  wrap.appendChild(table);
+  root.appendChild(wrap);
+}
+
+/* ───────── modal ───────── */
+const FORM_IDS=['f_code','f_name','f_location','f_category','f_subcategory','f_origin','f_price','f_abc','f_brand','f_model','f_features','f_weight','f_voltage','f_power_kw','f_length','f_width','f_height','f_manual_url'];
+
+function clearForm(){
+  FORM_IDS.forEach(id=>setV(id,''));
+  $('pdfNow').style.display='none';
+}
+function openAdd(){
+  adding=true;editing=null;
+  clearForm();
+  $('mTitle').textContent='Add product';
+  $('mCode').textContent='new product';
+  $('modal').classList.add('open');
+  $('f_code').focus();
+}
+function openEdit(code){
+  const p=merged().find(x=>String(x.code)===String(code));
+  if(!p)return;
+  adding=!!adds[code];editing=code;
+  clearForm();
+  $('mTitle').textContent=adding?'Edit new product':'Edit product';
+  $('mCode').textContent='#'+code;
+  setV('f_code',p.code);setV('f_name',p.name);setV('f_location',p.location);
+  setV('f_category',p.category);setV('f_subcategory',p.subcategory);
+  setV('f_origin',p.origin);setV('f_price',p.price);setV('f_abc',p.abc);
+  setV('f_brand',p.brand);setV('f_model',p.model);setV('f_features',p.features);
+  setV('f_weight',p.weight);setV('f_voltage',p.voltage);setV('f_power_kw',p.power_kw);
+  setV('f_length',p.dims?.length);setV('f_width',p.dims?.width);setV('f_height',p.dims?.height);
+  setV('f_manual_url',p.manual_url);
+  updatePdfNow();
+  $('modal').classList.add('open');
+}
+function closeModal(){$('modal').classList.remove('open')}
+
+function updatePdfNow(){
+  const v=val('f_manual_url');
+  const e=$('pdfNow');
+  if(v){e.textContent='Will save: '+v;e.style.display='block'}
+  else e.style.display='none';
+}
+
+function safeUrl(raw){
+  if(!raw)return null;
+  try{const u=new URL(raw.trim());return['http:','https:'].includes(u.protocol)?u.href:null}
+  catch{return null}
+}
+
+function collect(){
+  const manual=safeUrl(val('f_manual_url'));
+  return{
+    code:val('f_code'),
+    name:val('f_name')||null,
+    location:val('f_location')||null,
+    category:val('f_category')||null,
+    subcategory:val('f_subcategory')||null,
+    origin:val('f_origin')||null,
+    price:num('f_price'),
+    abc:val('f_abc')||null,
+    dims:{length:num('f_length'),width:num('f_width'),height:num('f_height')},
+    weight:num('f_weight'),
+    features:val('f_features')||null,
+    voltage:num('f_voltage'),
+    power_kw:num('f_power_kw'),
+    brand:val('f_brand')||null,
+    model:val('f_model')||null,
+    has_manual:!!manual,
+    manual_url:manual,
+    images:[],
+  };
+}
+
+function queueChange(){
+  const p=collect();
+  if(!p.code||!p.name){toast('Code and name are required','bad');return}
+  const rawUrl=val('f_manual_url');
+  if(rawUrl&&!p.manual_url){toast('PDF link is not a valid URL — it was not saved','bad');return}
+
+  if(adding||!editing){
+    if(merged().some(x=>String(x.code)===String(p.code))){toast('Code already exists: '+p.code,'bad');return}
+    adds[p.code]=p;
+  }else{
+    if(String(editing)!==String(p.code)&&merged().some(x=>String(x.code)===String(p.code))){
+      toast('New code already exists: '+p.code,'bad');return;
     }
-    return p;
-  });
+    pending[editing]=p;
+  }
+  closeModal();
+  renderAll();
+  toast('Queued. Click "Save to GitHub" in the yellow bar to commit.');
+}
 
-  try {
-    // Get current file SHA
-    const metaRes = await fetch(`https://api.github.com/repos/${githubRepo}/contents/data/products.json`, {
-      headers: { Authorization: `token ${githubToken}` }
+function discardAll(){
+  if(!pendingCount())return;
+  pending={};adds={};
+  renderAll();
+  toast('All queued changes discarded.');
+}
+
+/* ───────── GitHub save ───────── */
+function b64decode(c){
+  const bin=atob((c||'').replace(/\n/g,''));
+  return new TextDecoder().decode(Uint8Array.from(bin,x=>x.charCodeAt(0)));
+}
+function b64encode(s){
+  const bytes=new TextEncoder().encode(s);
+  let bin='';bytes.forEach(b=>bin+=String.fromCharCode(b));
+  return btoa(bin);
+}
+
+async function saveAll(){
+  const count=pendingCount();
+  if(!count)return;
+  const btn=$('saveAllBtn');
+  btn.disabled=true;btn.textContent='Saving…';
+  try{
+    // always merge into the latest version on GitHub
+    const metaRes=await fetch('https://api.github.com/repos/'+repo+'/contents/data/products.json',{headers:authH()});
+    if(!metaRes.ok)throw new Error('Could not fetch latest file ('+metaRes.status+')');
+    const meta=await metaRes.json();
+    const latest=JSON.parse(b64decode(meta.content));
+
+    let out=latest.map(p=>pending[p.code]?{...p,...pending[p.code]}:p);
+    Object.values(adds).forEach(np=>{
+      const i=out.findIndex(x=>String(x.code)===String(np.code));
+      if(i>=0)out[i]={...out[i],...np};
+      else out.push(np);
     });
-    const meta = await metaRes.json();
-    const sha = meta.sha;
 
-    // Update file
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(updated, null, 2))));
-    const putRes = await fetch(`https://api.github.com/repos/${githubRepo}/contents/data/products.json`, {
-      method: 'PUT',
-      headers: { Authorization: `token ${githubToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: `Admin: Update ${Object.keys(pendingChanges).length} products`,
-        content,
-        sha
-      })
+    const putRes=await fetch('https://api.github.com/repos/'+repo+'/contents/data/products.json',{
+      method:'PUT',
+      headers:{...authH(),'Content-Type':'application/json'},
+      body:JSON.stringify({
+        message:'Admin: update '+count+' product(s)',
+        content:b64encode(JSON.stringify(out,null,2)),
+        sha:meta.sha,
+      }),
     });
+    if(!putRes.ok){
+      const detail=await putRes.json().catch(()=>({}));
+      throw new Error('GitHub save failed ('+putRes.status+'): '+(detail.message||''));
+    }
 
-    if (!putRes.ok) throw new Error('GitHub хадгалах алдаа: ' + putRes.status);
-
-    products = updated;
-    pendingChanges = {};
-    renderAdminTable();
-    buildManualsPanel();
-    showToast(`✓ ${Object.keys(pendingChanges).length || 'Бүх'} өөрчлөлт GitHub-д хадгалагдлаа!`, 'success');
-  } catch (e) {
-    showToast('✗ Хадгалах алдаа: ' + e.message, 'error');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '💾 Бүгдийг хадгалах';
+    products=out;pending={};adds={};
+    renderAll();
+    toast('✓ Saved '+count+' change(s) to GitHub. The site updates in ~1 minute.','ok');
+  }catch(e){
+    toast('✗ '+e.message,'bad');
+  }finally{
+    btn.disabled=false;btn.textContent='Save to GitHub →';
   }
 }
 
-// ── MANUALS PANEL ──
-function buildManualsPanel() {
-  const withManual = products.filter(p => p.has_manual || p.manual_url);
-  let html = `<table>
-    <thead><tr>
-      <th>Код</th><th>Барааны нэр</th><th>PDF линк</th><th></th>
-    </tr></thead><tbody>`;
-
-  withManual.forEach(p => {
-    html += `<tr>
-      <td class="td-code">#${p.code}</td>
-      <td class="td-name">${p.name || '—'}<small>${p.subcategory || ''}</small></td>
-      <td style="font-size:11px;font-family:var(--mono);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-        ${p.manual_url ? `<a href="${p.manual_url}" target="_blank" style="color:var(--blue)">${p.manual_url.substring(0,50)}...</a>` : '<span style="color:var(--text-light)">Линк байхгүй</span>'}
-      </td>
-      <td><button class="edit-btn ${p.manual_url ? 'has-manual' : ''}" onclick="openEdit('${p.code}'); showPanel('products')">✏ засах</button></td>
-    </tr>`;
-  });
-
-  html += `</tbody></table>`;
-  document.getElementById('manualsTableWrap').innerHTML = html;
+/* ───────── nav ───────── */
+function showPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-btn[data-panel]').forEach(b=>b.classList.toggle('on',b.dataset.panel===id));
+  $('panel-'+id).classList.add('on');
 }
 
-// ── STATS ──
-function buildStatsPanel() {
-  const cats = {};
-  let withManual = 0, withUrl = 0, inStock = 0, outStock = 0;
-  let totalVal = 0;
-  products.forEach(p => {
-    if (p.has_manual) withManual++;
-    if (p.manual_url) withUrl++;
-    if (p.stock > 0) inStock++;
-    if (p.stock === 0) outStock++;
-    if (p.stock_value) totalVal += p.stock_value;
-    cats[p.category || '—'] = (cats[p.category || '—'] || 0) + 1;
-  });
-
-  let catRows = Object.entries(cats).sort((a,b) => b[1]-a[1]).map(([k,v]) =>
-    `<tr><td>${k}</td><td style="font-family:var(--mono);font-weight:500">${v}</td></tr>`
-  ).join('');
-
-  document.getElementById('statsContent').innerHTML = `
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-val">${products.length}</div><div class="stat-label">Нийт бараа</div></div>
-      <div class="stat-card"><div class="stat-val">${withManual}</div><div class="stat-label">Гарын авлагатай</div></div>
-      <div class="stat-card"><div class="stat-val" style="color:var(--blue)">${withUrl}</div><div class="stat-label">PDF линктэй</div></div>
-      <div class="stat-card"><div class="stat-val" style="color:var(--green)">${inStock}</div><div class="stat-label">Нөөцтэй</div></div>
-      <div class="stat-card"><div class="stat-val" style="color:var(--red)">${outStock}</div><div class="stat-label">Нөөц дууссан</div></div>
-      <div class="stat-card"><div class="stat-val" style="font-size:18px">${(totalVal/1000000).toFixed(0)}M</div><div class="stat-label">Нөөцийн нийт дүн ₮</div></div>
-    </div>
-    <div class="data-table-wrap">
-      <div class="card-title" style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg);font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted)">Ангиллаар</div>
-      <table><thead><tr><th>Ангилал</th><th>Тоо</th></tr></thead><tbody>${catRows}</tbody></table>
-    </div>`;
-}
-
-// ── NAV ──
-function showPanel(id) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
-  document.querySelectorAll('.admin-nav-btn').forEach(b => {
-    if (b.textContent.toLowerCase().includes(
-      id === 'products' ? 'бараа' : id === 'manuals' ? 'гарын' : id === 'stats' ? 'стат' : 'тохир'
-    )) b.classList.add('active');
-  });
-  if (id === 'manuals') buildManualsPanel();
-  if (id === 'stats') buildStatsPanel();
-}
-
-// ── TOAST ──
-function showToast(msg, type = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + type + ' show';
-  setTimeout(() => t.classList.remove('show'), 3500);
-}
-
-// ── INIT ──
-window.addEventListener('DOMContentLoaded', () => {
-  // Restore session
-  const savedRepo = sessionStorage.getItem('gh_repo');
-  const savedToken = sessionStorage.getItem('gh_token');
-  if (savedRepo && savedToken) {
-    githubRepo = savedRepo;
-    githubToken = savedToken;
-    document.getElementById('repoInput').value = savedRepo;
-    showAdmin();
-  }
+/* ───────── events ───────── */
+$('loginBtn').onclick=doLogin;
+$('token').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+$('logoutNav').onclick=doLogout;
+$('logoutBtn').onclick=doLogout;
+$('addBtn').onclick=openAdd;
+$('saveAllBtn').onclick=saveAll;
+$('discardBtn').onclick=discardAll;
+$('mSave').onclick=queueChange;
+$('mClose').onclick=closeModal;
+$('mCancel').onclick=closeModal;
+$('srch').addEventListener('input',()=>{prodPage=1;renderProducts()});
+$('f_manual_url').addEventListener('input',updatePdfNow);
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
+document.querySelectorAll('.nav-btn[data-panel]').forEach(b=>b.onclick=()=>showPanel(b.dataset.panel));
+document.querySelectorAll('.chip').forEach(c=>{
+  c.onclick=()=>{
+    const k=c.dataset.chip;
+    chips.has(k)?chips.delete(k):chips.add(k);
+    c.classList.toggle('on',chips.has(k));
+    prodPage=1;renderProducts();
+  };
 });
 
-// Close modal on overlay click
-document.getElementById('editModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('editModal')) closeModal();
+window.addEventListener('DOMContentLoaded',()=>{
+  const saved=sessionStorage.getItem('gh_repo');
+  if(saved)$('repo').value=saved;
 });
 </script>
 </body>

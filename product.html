@@ -1,551 +1,365 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="mn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Бараа — Чиглэл ХХК</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product — Chiglel LLC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #F5F3EE;
-    --surface: #FFFFFF;
-    --border: #DDD9D0;
-    --border-strong: #B8B2A5;
-    --text: #1A1A18;
-    --text-muted: #6B6860;
-    --text-light: #9B9890;
-    --accent: #C8330A;
-    --accent-hover: #A82A08;
-    --accent-light: #FDF0EC;
-    --green: #2D7A4F;
-    --green-bg: #EDF7F2;
-    --blue: #1A4A8A;
-    --blue-bg: #EEF3FA;
-    --mono: 'IBM Plex Mono', monospace;
-    --sans: 'IBM Plex Sans', sans-serif;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: var(--sans); background: var(--bg); color: var(--text); }
+:root{
+  --bg:#edf0f3;--surface:#fff;--ink:#14202e;--muted:#5c6b7a;--faint:#94a1ae;
+  --line:#d5dbe2;--line-soft:#e8ecf0;
+  --brand:#1660c9;--brand-deep:#0e3b7e;--brand-soft:#e8f0fc;
+  --ok:#1e7a46;--ok-soft:#e6f3ec;
+  --warn:#b35a00;--warn-soft:#fbf0e3;
+  --kr:#6242b8;--kr-soft:#efe9fb;
+  --tr:#b32430;--tr-soft:#fbe9ea;
+  --ru:#8a6d00;--ru-soft:#f8f2da;
+  --mono:'IBM Plex Mono',Consolas,monospace;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --disp:'Archivo',var(--sans);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14px}
 
-  header {
-    background: var(--text);
-    color: white;
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--mono);
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-  }
-  .header-brand span { color: var(--accent); font-size: 20px; font-weight: 600; }
-  .back-btn {
-    color: rgba(255,255,255,0.7);
-    text-decoration: none;
-    font-size: 13px;
-    font-family: var(--mono);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.2s;
-  }
-  .back-btn:hover { color: white; }
+header{
+  background:var(--ink);color:#fff;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;position:sticky;top:0;z-index:50;
+}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#fff}
+.brand-mark{width:30px;height:30px;background:var(--brand);border-radius:6px;display:grid;place-items:center;font:800 16px var(--disp)}
+.brand-name{font:700 15px var(--disp);letter-spacing:.04em}
+.back{color:#8fa3b8;font:12px var(--mono);text-decoration:none;padding:8px 0}
+.back:hover{color:#fff}
 
-  .page-wrap {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 32px 28px 60px;
-  }
+.wrap{max-width:1080px;margin:0 auto;padding:26px 24px 64px}
 
-  /* Breadcrumb */
-  .breadcrumb {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-light);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
-  .breadcrumb a:hover { color: var(--accent); }
+.crumb{font:11px var(--mono);color:var(--faint);display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.crumb a{color:var(--muted);text-decoration:none}
+.crumb a:hover{color:var(--brand)}
 
-  /* Main layout */
-  .product-layout {
-    display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 24px;
-    align-items: start;
-  }
+.layout{display:grid;grid-template-columns:1fr 330px;gap:20px;align-items:start}
 
-  /* Left col */
-  .product-main {}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-bottom:18px}
+.panel-title{
+  padding:11px 20px;border-bottom:1px solid var(--line);background:#f7f9fa;
+  font:600 10.5px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+}
 
-  /* Product header card */
-  .product-header-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 28px;
-    margin-bottom: 20px;
-  }
-  .product-code-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-  .product-code {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text-light);
-    letter-spacing: 0.06em;
-    background: var(--bg);
-    padding: 3px 10px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-  }
-  .badge {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 500;
-    padding: 3px 8px;
-    border-radius: 4px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .badge-mn { background: #E8F3EC; color: #2D7A4F; }
-  .badge-cn { background: #FFF3E8; color: #B85A00; }
-  .badge-manual { background: var(--blue-bg); color: var(--blue); }
-  .badge-a { background: #FFF0EC; color: var(--accent); }
-  .badge-b { background: #FFF8E8; color: #8B6000; }
-  .badge-c { background: #F0F0F0; color: #666; }
-  .badge-stock-zero { background: #FEF0F0; color: #C0392B; }
-  .badge-stock-low { background: #FFF9E6; color: #B7770A; }
-  .badge-stock-ok { background: #EEF8F2; color: #27774F; }
+/* ── nameplate hero ── */
+.hero{padding:24px}
+.plate-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.plate{
+  font:600 15px var(--mono);color:var(--ink);letter-spacing:.05em;
+  background:linear-gradient(180deg,#f7f9fa,#eceff2);
+  border:1px solid var(--line);border-radius:6px;padding:5px 13px;
+  box-shadow:inset 0 1px 0 #fff,0 1px 1px rgba(20,32,46,.06);
+}
+.tag{font:600 10px var(--mono);padding:4px 9px;border-radius:5px;letter-spacing:.05em}
+.t-mn{background:var(--ok-soft);color:var(--ok)}
+.t-cn{background:var(--warn-soft);color:var(--warn)}
+.t-kr{background:var(--kr-soft);color:var(--kr)}
+.t-tr{background:var(--tr-soft);color:var(--tr)}
+.t-ru{background:var(--ru-soft);color:var(--ru)}
+.t-abc{background:#eef1f4;color:var(--muted)}
+.t-pdf{background:var(--brand-soft);color:var(--brand)}
 
-  .product-name {
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 1.35;
-    margin-bottom: 8px;
-    color: var(--text);
-  }
-  .product-category {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-bottom: 20px;
-  }
-  .product-category strong { color: var(--text); font-weight: 500; }
+h1{font:700 23px/1.32 var(--disp);margin:0 0 7px;letter-spacing:-.01em}
+.cat-line{color:var(--muted);font-size:13px;margin-bottom:18px}
+.cat-line b{color:var(--ink);font-weight:600}
 
-  .price-row {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    padding-top: 16px;
-    border-top: 1px solid var(--bg);
-  }
-  .price-main {
-    font-family: var(--mono);
-    font-size: 28px;
-    font-weight: 500;
-    color: var(--text);
-  }
-  .price-unit {
-    font-family: var(--mono);
-    font-size: 14px;
-    color: var(--text-muted);
-  }
+.price-row{border-top:1px solid var(--line-soft);padding-top:16px;display:flex;align-items:baseline;gap:8px}
+.price{font:600 30px var(--mono);letter-spacing:-.01em}
+.unit{font:13px var(--mono);color:var(--muted)}
 
-  /* Spec table */
-  .spec-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
-  .card-title {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    background: var(--bg);
-  }
-  .spec-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .spec-table tr:not(:last-child) td { border-bottom: 1px solid var(--bg); }
-  .spec-table td {
-    padding: 11px 20px;
-    font-size: 13px;
-    vertical-align: top;
-  }
-  .spec-table td:first-child {
-    color: var(--text-muted);
-    width: 40%;
-    font-size: 12.5px;
-  }
-  .spec-table td:last-child {
-    font-weight: 500;
-    font-family: var(--mono);
-    font-size: 12.5px;
-    color: var(--text);
-  }
-  .spec-table tr:hover td { background: var(--bg); }
+/* ── spec tables with dotted leaders ── */
+.spec-body{padding:8px 20px 14px}
+.srow{display:flex;align-items:baseline;gap:8px;padding:7px 0;font-size:13px}
+.srow+.srow{border-top:1px solid var(--line-soft)}
+.srow .k{color:var(--muted);flex-shrink:0}
+.srow .dots{flex:1;border-bottom:1px dotted var(--line);transform:translateY(-4px);min-width:20px}
+.srow .v{font:500 12.5px var(--mono);color:var(--ink);text-align:right;max-width:60%;overflow-wrap:break-word}
 
-  /* Right sidebar */
-  .product-sidebar {}
+/* ── PDF viewer ── */
+.pdfbox{aspect-ratio:3/4;background:#e9ecef;max-height:560px}
+.pdfbox iframe{width:100%;height:100%;border:0;display:block}
+.pdf-actions{display:flex;gap:9px;padding:13px 16px;flex-wrap:wrap}
+.btn{
+  flex:1;display:flex;justify-content:center;align-items:center;gap:7px;
+  padding:11px 14px;border-radius:7px;text-decoration:none;
+  font:600 13px var(--sans);transition:.13s;min-width:140px;
+}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:#1252ad}
+.btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
 
-  .sidebar-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 16px;
-    position: sticky;
-    top: 72px;
-  }
+.no-pdf{padding:36px 20px;text-align:center;color:var(--faint);font-size:13px}
+.no-pdf .big{font-size:30px;opacity:.45;margin-bottom:8px}
 
-  /* PDF section */
-  .pdf-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
+/* ── contact sidebar ── */
+.aside-sticky{position:sticky;top:78px}
+.contact{padding:6px 18px 12px}
+.c-item{display:flex;gap:12px;align-items:center;padding:10px 0}
+.c-item+.c-item{border-top:1px solid var(--line-soft)}
+.c-ico{width:34px;height:34px;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-size:15px;flex-shrink:0}
+.c-label{font:10.5px var(--mono);color:var(--faint);display:block;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1px}
+.c-val{font:600 13px var(--sans);color:var(--ink)}
+.c-val a{color:var(--brand);text-decoration:none}
 
-  .pdf-viewer-wrap {
-    width: 100%;
-    aspect-ratio: 3/4;
-    background: #F0EDE8;
-    position: relative;
-  }
-  .pdf-viewer-wrap iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-  .no-pdf {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 220px;
-    gap: 10px;
-    color: var(--text-muted);
-    font-size: 13px;
-  }
-  .no-pdf-icon { font-size: 40px; opacity: 0.4; }
+.state{text-align:center;padding:90px 24px;color:var(--muted)}
+.state .big{font-size:40px;opacity:.5;margin-bottom:12px}
+.state h3{margin:0 0 8px;font:600 17px var(--sans);color:var(--ink)}
+.state a{color:var(--brand)}
 
-  .pdf-actions {
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .btn-primary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 11px 16px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-family: var(--sans);
-    font-size: 13.5px;
-    font-weight: 500;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-  .btn-primary:hover { background: var(--accent-hover); }
-  .btn-secondary {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: white;
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-family: var(--sans);
-    font-size: 13px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .btn-secondary:hover { border-color: var(--text); }
-
-  /* Contact card */
-  .contact-card-body { padding: 16px; }
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--bg);
-    font-size: 13px;
-  }
-  .contact-item:last-child { border-bottom: none; }
-  .contact-icon { width: 28px; text-align: center; font-size: 15px; }
-  .contact-label { font-size: 11px; color: var(--text-light); display: block; margin-bottom: 1px; }
-  .contact-value { font-weight: 500; color: var(--text); }
-
-  /* Loading */
-  .loading-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60vh;
-    gap: 12px;
-    color: var(--text-muted);
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner {
-    width: 22px; height: 22px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
-
-  @media (max-width: 900px) {
-    .product-layout { grid-template-columns: 1fr; }
-    .sidebar-card { position: static; }
-    .page-wrap { padding: 20px 16px 40px; }
-    header { padding: 0 16px; }
-  }
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .aside-sticky{position:static}
+  .wrap{padding:18px 14px 44px}
+  header{padding:0 16px}
+  h1{font-size:19px}
+  .price{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-brand">
-    <span>Ч</span> ЧИГЛЭЛ ХХК
-  </div>
-  <a href="index.html" class="back-btn">← Каталог руу буцах</a>
+  <a class="brand" href="index.html">
+    <span class="brand-mark">Ч</span>
+    <span class="brand-name">CHIGLEL LLC</span>
+  </a>
+  <a class="back" href="index.html">← Back to catalog</a>
 </header>
 
-<div class="page-wrap" id="pageContent">
-  <div class="loading-page"><div class="spinner"></div> Ачаалж байна...</div>
-</div>
+<main class="wrap" id="root">
+  <div class="state"><div class="big">⏳</div><h3>Loading…</h3></div>
+</main>
 
 <script>
-async function init() {
-  const params = new URLSearchParams(location.search);
-  const code = params.get('code');
-  if (!code) { location.href = 'index.html'; return; }
+'use strict';
+const $=id=>document.getElementById(id);
+const el=(tag,cls,text)=>{
+  const e=document.createElement(tag);
+  if(cls)e.className=cls;
+  if(text!==undefined&&text!==null)e.textContent=String(text);
+  return e;
+};
 
-  const res = await fetch('data/products.json');
-  const products = await res.json();
-  const p = products.find(x => x.code === code);
+const ORIGIN_TAG={
+  'Монгол':['Mongolia','t-mn'],'Хятад':['China','t-cn'],
+  'Солонгос':['Korea','t-kr'],'Турк':['Turkey','t-tr'],'Орос':['Russia','t-ru'],
+};
 
-  if (!p) {
-    document.getElementById('pageContent').innerHTML = `
-      <div style="text-align:center;padding:80px;color:var(--text-muted)">
-        <div style="font-size:48px;margin-bottom:12px">🔍</div>
-        <h3>Бараа олдсонгүй (#${code})</h3>
-        <p style="margin-top:8px"><a href="index.html" style="color:var(--accent)">Каталог руу буцах</a></p>
-      </div>`;
+function safeUrl(raw){
+  if(!raw)return '';
+  try{const u=new URL(raw);return ['http:','https:'].includes(u.protocol)?u.href:''}
+  catch{return ''}
+}
+function driveId(raw){
+  const href=safeUrl(raw);
+  if(!href)return '';
+  try{
+    const u=new URL(href);
+    if(!u.hostname.includes('drive.google.com'))return '';
+    const m=u.pathname.match(/\/file\/d\/([^/]+)/);
+    return m?m[1]:(u.searchParams.get('id')||'');
+  }catch{return ''}
+}
+function manualLinks(raw){
+  const href=safeUrl(raw);
+  if(!href)return null;
+  const id=driveId(href);
+  if(id){
+    const enc=encodeURIComponent(id);
+    return{
+      preview:'https://drive.google.com/file/d/'+enc+'/preview',
+      download:'https://drive.google.com/uc?export=download&id='+enc,
+      open:'https://drive.google.com/file/d/'+enc+'/view',
+    };
+  }
+  return{preview:href,download:href,open:href};
+}
+
+function specRow(key,value){
+  if(value===null||value===undefined||value==='')return null;
+  const r=el('div','srow');
+  r.append(el('span','k',key),el('span','dots'),el('span','v',value));
+  return r;
+}
+function specPanel(title,rows){
+  const real=rows.filter(Boolean);
+  if(!real.length)return null;
+  const p=el('section','panel');
+  p.appendChild(el('div','panel-title',title));
+  const body=el('div','spec-body');
+  real.forEach(r=>body.appendChild(r));
+  p.appendChild(body);
+  return p;
+}
+
+function notFound(code){
+  const root=$('root');
+  root.innerHTML='';
+  const s=el('div','state');
+  s.append(el('div','big','🔍'),el('h3',null,'Product not found (#'+code+')'));
+  const p=el('p');
+  const a=el('a',null,'← Back to catalog');
+  a.href='index.html';
+  p.appendChild(a);
+  s.appendChild(p);
+  root.appendChild(s);
+}
+
+async function init(){
+  const code=new URLSearchParams(location.search).get('code');
+  if(!code){location.href='index.html';return}
+  let products;
+  try{
+    const r=await fetch('data/products.json');
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    products=await r.json();
+  }catch(e){
+    const root=$('root');
+    root.innerHTML='';
+    const s=el('div','state');
+    s.append(el('div','big','⚠'),el('h3',null,'Could not load product data'),el('p',null,e.message));
+    root.appendChild(s);
     return;
   }
+  const p=products.find(x=>String(x.code)===String(code));
+  if(!p)return notFound(code);
+  document.title=(p.name||p.code)+' — Chiglel LLC';
+  render(p);
+}
 
-  document.title = `${p.name || p.code} — Чиглэл ХХК`;
+function render(p){
+  const root=$('root');
+  root.innerHTML='';
 
-  // Badges
-  const originBadge = p.origin === 'Монгол'
-    ? `<span class="badge badge-mn">🇲🇳 Монгол үйлдвэр</span>`
-    : p.origin === 'Хятад' ? `<span class="badge badge-cn">Хятад</span>` : '';
-  const manualBadge = p.has_manual ? `<span class="badge badge-manual">📄 Гарын авлагатай</span>` : '';
-  const abcBadge = p.abc ? `<span class="badge badge-${p.abc.toLowerCase()}">ABC: ${p.abc}</span>` : '';
+  // breadcrumb
+  const crumb=el('div','crumb');
+  const home=el('a',null,'Catalog');home.href='index.html';
+  crumb.append(home,document.createTextNode('/'),el('span',null,p.category||'—'));
+  if(p.subcategory)crumb.append(document.createTextNode('/'),el('span',null,p.subcategory));
+  root.appendChild(crumb);
 
-  const stockBadge = p.stock === null ? '' :
-    p.stock === 0 ? `<span class="badge badge-stock-zero">Дууссан</span>` :
-    p.stock <= 3 ? `<span class="badge badge-stock-low">⚠ ${p.stock} ширхэг үлдсэн</span>` :
-    `<span class="badge badge-stock-ok">✓ ${p.stock} ширхэг нөөцтэй</span>`;
+  const layout=el('div','layout');
+  const left=el('div');
 
-  // Specs rows
-  const specRows = [
-    ['Барааны код', `#${p.code}`],
-    ['Ангилал', p.category],
-    ['Дэд ангилал', p.subcategory],
-    ['Гарал үүсэл', p.origin],
-    ['Бренд', p.brand],
-    ['Марк / Загвар', p.model],
-    ['Онцлог', p.features],
-  ].filter(([,v]) => v).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+  // ── hero with nameplate ──
+  const hero=el('section','panel');
+  const heroIn=el('div','hero');
 
-  const dimParts = [];
-  if (p.dims?.length) dimParts.push(`${p.dims.length}мм (урт)`);
-  if (p.dims?.width) dimParts.push(`${p.dims.width}мм (өргөн)`);
-  if (p.dims?.height) dimParts.push(`${p.dims.height}мм (өндөр)`);
+  const pr=el('div','plate-row');
+  pr.appendChild(el('span','plate','#'+p.code));
+  const ot=ORIGIN_TAG[p.origin];
+  if(ot)pr.appendChild(el('span','tag '+ot[1],ot[0]));
+  if(p.abc)pr.appendChild(el('span','tag t-abc','ABC '+p.abc));
+  if(p.manual_url)pr.appendChild(el('span','tag t-pdf','📄 Manual'));
+  heroIn.appendChild(pr);
 
-  const techRows = [
-    ['Хэмжээ', dimParts.length ? dimParts.join(' × ') : null],
-    ['Жин', p.weight ? `${p.weight} кг` : null],
-    ['Хүчдэл', p.voltage ? `${p.voltage}V` : null],
-    ['Хүч чадал', p.power_kw ? `${p.power_kw} кВт` : null],
-    ['Нөөц', p.stock !== null ? `${p.stock} ширхэг` : null],
-    ['Нөөцийн дүн', p.stock_value ? `${p.stock_value.toLocaleString()} ₮` : null],
-  ].filter(([,v]) => v).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+  heroIn.appendChild(el('h1',null,p.name||'—'));
 
-  // PDF section
-  let pdfSection = '';
-  if (p.has_manual) {
-    if (p.manual_url) {
-      // Has actual PDF link
-      const embedUrl = p.manual_url.includes('drive.google.com')
-        ? p.manual_url.replace('/view', '/preview').replace('/edit', '/preview')
-        : p.manual_url;
-      pdfSection = `
-        <div class="pdf-section">
-          <div class="card-title">📄 Гарын авлага / User Manual</div>
-          <div class="pdf-viewer-wrap">
-            <iframe src="${embedUrl}" allowfullscreen></iframe>
-          </div>
-          <div class="pdf-actions">
-            <a href="${p.manual_url}" target="_blank" class="btn-primary">
-              ⬇ PDF татаж авах
-            </a>
-            <a href="${p.manual_url}" target="_blank" class="btn-secondary">
-              🔗 Google Drive-д нээх
-            </a>
-          </div>
-        </div>`;
-    } else {
-      // Manual flagged but no URL yet
-      pdfSection = `
-        <div class="pdf-section">
-          <div class="card-title">📄 Гарын авлага / User Manual</div>
-          <div class="no-pdf">
-            <div class="no-pdf-icon">📋</div>
-            <div>Гарын авлага байгаа — удахгүй нэмэгдэнэ</div>
-          </div>
-        </div>`;
-    }
+  const cl=el('div','cat-line');
+  cl.appendChild(el('b',null,p.category||'—'));
+  if(p.subcategory)cl.appendChild(document.createTextNode(' / '+p.subcategory));
+  heroIn.appendChild(cl);
+
+  if(p.price){
+    const prr=el('div','price-row');
+    prr.append(el('span','price',Number(p.price).toLocaleString()),el('span','unit','₮ / unit'));
+    heroIn.appendChild(prr);
   }
+  hero.appendChild(heroIn);
+  left.appendChild(hero);
 
-  document.getElementById('pageContent').innerHTML = `
-    <div class="breadcrumb">
-      <a href="index.html">Каталог</a> /
-      <span>${p.category || '—'}</span> /
-      <span>${p.subcategory || '—'}</span>
-    </div>
+  // ── general info ──
+  const gen=specPanel('General information',[
+    specRow('Code','#'+p.code),
+    specRow('Location',p.location),
+    specRow('Category',p.category),
+    specRow('Subcategory',p.subcategory),
+    specRow('Origin',p.origin),
+    specRow('Brand',p.brand),
+    specRow('Model',p.model),
+    specRow('Features',p.features),
+  ]);
+  if(gen)left.appendChild(gen);
 
-    <div class="product-layout">
-      <div class="product-main">
+  // ── technical specs ──
+  const dims=[];
+  if(p.dims?.length)dims.push(p.dims.length);
+  if(p.dims?.width)dims.push(p.dims.width);
+  if(p.dims?.height)dims.push(p.dims.height);
+  const tech=specPanel('Technical specifications',[
+    specRow('Dimensions (L×W×H)',dims.length?dims.join(' × ')+' mm':null),
+    specRow('Weight',p.weight?p.weight+' kg':null),
+    specRow('Voltage',p.voltage?p.voltage+' V':null),
+    specRow('Power',p.power_kw?p.power_kw+' kW':null),
+  ]);
+  if(tech)left.appendChild(tech);
 
-        <div class="product-header-card">
-          <div class="product-code-row">
-            <span class="product-code">#${p.code}</span>
-            ${originBadge} ${abcBadge} ${manualBadge} ${stockBadge}
-          </div>
-          <h1 class="product-name">${p.name || '—'}</h1>
-          <div class="product-category">
-            <strong>${p.category || '—'}</strong>
-            ${p.subcategory ? ` / ${p.subcategory}` : ''}
-          </div>
-          ${p.price ? `
-          <div class="price-row">
-            <div class="price-main">${p.price.toLocaleString()}</div>
-            <div class="price-unit">₮ / нэгж</div>
-          </div>` : ''}
-        </div>
+  // ── PDF manual ──
+  const links=manualLinks(p.manual_url);
+  const pdf=el('section','panel');
+  pdf.appendChild(el('div','panel-title','User manual'));
+  if(links){
+    const box=el('div','pdfbox');
+    const ifr=document.createElement('iframe');
+    ifr.src=links.preview;
+    ifr.allowFullscreen=true;
+    ifr.loading='lazy';
+    box.appendChild(ifr);
+    pdf.appendChild(box);
 
-        ${specRows ? `
-        <div class="spec-card">
-          <div class="card-title">Ерөнхий мэдээлэл</div>
-          <table class="spec-table">${specRows}</table>
-        </div>` : ''}
+    const acts=el('div','pdf-actions');
+    const dl=el('a','btn btn-primary','⬇ Download PDF');
+    dl.href=links.download;dl.target='_blank';dl.rel='noopener';
+    const op=el('a','btn btn-ghost','Open in Google Drive ↗');
+    op.href=links.open;op.target='_blank';op.rel='noopener';
+    acts.append(dl,op);
+    pdf.appendChild(acts);
+  }else{
+    const np=el('div','no-pdf');
+    np.append(el('div','big','📄'),document.createTextNode('No manual uploaded for this product yet.'));
+    pdf.appendChild(np);
+  }
+  left.appendChild(pdf);
 
-        ${techRows ? `
-        <div class="spec-card">
-          <div class="card-title">Техникийн үзүүлэлт</div>
-          <table class="spec-table">${techRows}</table>
-        </div>` : ''}
+  // ── right sidebar ──
+  const right=el('aside','aside-sticky');
+  const contact=el('section','panel');
+  contact.appendChild(el('div','panel-title','Contact'));
+  const cbody=el('div','contact');
+  [
+    ['📞','Phone','+976 7611 5333',null],
+    ['📱','Mobile','+976 9133 5333',null],
+    ['✉️','Email','info@chiglel.mn',null],
+    ['🌐','Website','chiglel.mn','https://www.chiglel.mn'],
+  ].forEach(([ico,label,val,href])=>{
+    const item=el('div','c-item');
+    item.appendChild(el('div','c-ico',ico));
+    const tx=el('div');
+    tx.appendChild(el('span','c-label',label));
+    const v=el('div','c-val');
+    if(href){
+      const a=el('a',null,val);a.href=href;a.target='_blank';a.rel='noopener';
+      v.appendChild(a);
+    }else v.textContent=val;
+    tx.appendChild(v);
+    item.appendChild(tx);
+    cbody.appendChild(item);
+  });
+  contact.appendChild(cbody);
+  right.appendChild(contact);
 
-        ${pdfSection}
-
-      </div>
-
-      <div class="product-sidebar">
-        <div class="sidebar-card">
-          <div class="card-title">Холбоо барих</div>
-          <div class="contact-card-body">
-            <div class="contact-item">
-              <div class="contact-icon">📞</div>
-              <div>
-                <span class="contact-label">Утас</span>
-                <span class="contact-value">+976 7611 5333</span>
-              </div>
-            </div>
-            <div class="contact-item">
-              <div class="contact-icon">📱</div>
-              <div>
-                <span class="contact-label">Мобайл</span>
-                <span class="contact-value">+976 9133 5333</span>
-              </div>
-            </div>
-            <div class="contact-item">
-              <div class="contact-icon">✉️</div>
-              <div>
-                <span class="contact-label">И-мэйл</span>
-                <span class="contact-value">info@chiglel.mn</span>
-              </div>
-            </div>
-            <div class="contact-item">
-              <div class="contact-icon">🌐</div>
-              <div>
-                <span class="contact-label">Вэб</span>
-                <span class="contact-value"><a href="https://www.chiglel.mn" target="_blank" style="color:var(--accent);text-decoration:none">chiglel.mn</a></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="sidebar-card">
-          <div class="card-title">Дэлгүүрийн байршил</div>
-          <div class="contact-card-body">
-            <div class="contact-item">
-              <div class="contact-icon">🏪</div>
-              <div>
-                <span class="contact-label">Төв дэлгүүр (ЧД)</span>
-                <span class="contact-value" style="font-size:11px;line-height:1.5">Хүчит шонхор зах, Содмонгол ШТС-ын эсрэг</span>
-              </div>
-            </div>
-            <div class="contact-item">
-              <div class="contact-icon">🏭</div>
-              <div>
-                <span class="contact-label">Үйлдвэр (ХУД)</span>
-                <span class="contact-value" style="font-size:11px;line-height:1.5">3-р цахилгаан станцийн баруун урд</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>`;
+  layout.append(left,right);
+  root.appendChild(layout);
 }
 
 init();
