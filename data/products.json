@@ -2659,8 +2659,8 @@
     "power_kw": 12,
     "brand": "Чиглэл ХХК",
     "model": null,
-    "has_manual": false,
-    "manual_url": null,
+    "has_manual": true,
+    "manual_url": "https://drive.google.com/open?id=1TPPZkmHFMS42urJw4MgkyBSOhEs-GKnC&usp=drive_copy",
     "images": []
   },
   {
